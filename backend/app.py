@@ -56,14 +56,13 @@ userSchema = UserSchema(many=True)
 
 @app.route('/api/seat/<seat_id>', methods=['GET', 'POST'])
 def get_seat_status(seat_id):
+    seat = Seat.query.get(seat_id)
     if request.method == 'GET':
-        seat = Seat.query.get(seat_id)
         if seat:
             return jsonify({'id': seat.id, 'isAvailable': seat.isAvailable, 'isVIP': seat.isVIP, 'owner_id': seat.owner_id})
         else:
             return jsonify({'error': 'Seat not found'}), 404
     elif request.method == 'POST':
-        seat = Seat.query.get(seat_id)
         if seat:
             try:
                 data = request.get_json()
@@ -83,6 +82,12 @@ def get_seat_status(seat_id):
 def get_all_seats():
     seats = Seat.query.all()
     result = seatSchema.dump(seats)
+    return jsonify(result)
+
+@app.route('/api/users', methods=['GET'])
+def get_all_users():
+    users = User.query.all()
+    result = userSchema.dump(users)
     return jsonify(result)
 
 @app.after_request

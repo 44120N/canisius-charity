@@ -1,32 +1,35 @@
 <!-- Commands -->
-Create React Files: npx create-react-app <project-name>
+Create React App: npx create-react-app <project-name>
 Run the React App: cd <project-name>; npm install; npm start
 Create Python Environment: python -m venv <env-name>
 Activate the Environment: .\<env-name>\Scripts\activate
 
-python_version = {
-    "python": "3.11.6",
-    "pip": "23.3.1",
-    "flask": "3.0.1",
-    "flask_cors": "4.0.0",
-    "flask_sqlalchemy": "3.1.1",
-    "flask_marsmallow": "1.1.0",
-    "marshmallow": "3.20.2",
-    "pymysql": "1.1.0",
-    "cryptography": "42.0.0",
-    "flask_oauthlib": "0.9.6",
-    "flask_jwt_extended": "4.6.0",
-    <!-- "flask_login": "0.6.3", -->
-    "werkzeug": "3.0.1"
-}
+Python 3.11.6
 
-google_OAuth = {
-    "web":{"client_id":"503641153887-3fls50daccrtqfl4jdmd73d4q7teqrgq.apps.googleusercontent.com",
-    "project_id":"leafy-sunrise-412504",
-    "auth_uri":"https://accounts.google.com/o/oauth2/auth",
-    "token_uri":"https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
-    "client_secret":"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",
-    "redirect_uris":["http://localhost","http://localhost:3000"],
-    "javascript_origins":["http://localhost","http://localhost:3000"]}
-}
+Package            Version
+------------------ --------
+blinker            1.7.0
+certifi            2024.2.2
+charset-normalizer 3.3.2
+click              8.1.7
+colorama           0.4.6
+Flask              3.0.1
+Flask-Cors         4.0.0
+flask-marshmallow  1.1.0
+Flask-SQLAlchemy   3.1.1
+greenlet           3.0.3
+idna               3.6
+itsdangerous       2.1.2
+Jinja2             3.1.3
+MarkupSafe         2.1.5
+marshmallow        3.20.2
+packaging          23.2
+pip                23.3.2
+PyMySQL            1.1.0
+python-dotenv      1.0.1
+requests           2.31.0
+setuptools         65.5.0
+SQLAlchemy         2.0.25
+typing_extensions  4.9.0
+urllib3            2.2.0
+Werkzeug           3.0.1
