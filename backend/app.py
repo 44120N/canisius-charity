@@ -8,7 +8,7 @@ from models import db, Seat, User
 
 dotenv.load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../myapp/build')
 CORS(app)
 
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
