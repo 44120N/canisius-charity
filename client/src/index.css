@@ -255,7 +255,7 @@ button{
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
-    max-width: 10vh;
+    max-width: 20vw;
 }
 
 .table__flex{

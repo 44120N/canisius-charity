@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useUser } from '../UserContext';
 import { useSeat } from '../SeatContext';
-import { useSnap } from '../SnapContext';
 import axios from 'axios';
 
 const SeatLogic = () => {
-  const { snapToken } = useSnap();
   const { user } = useUser();
   const { seat, cost, updateCost } = useSeat();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -69,6 +67,26 @@ const SeatLogic = () => {
           const requestData = await response.data;
           console.log(requestData.token);
           console.log(requestData.redirect_url);
+          if(requestData.token){
+            window.snap.pay(requestData.token, {
+              onSuccess: function(result){
+                
+                alert("payment success!"); 
+                console.log(result);
+              },
+              onPending: function(result){
+                alert("wating your payment!"); 
+                console.log(result);
+              },
+              onError: function(result){
+                alert("payment failed!"); 
+                console.log(result);
+              },
+              onClose: function(){
+                alert('you closed the popup without finishing the payment');
+              }
+            })
+          }
         } catch (error) {
           console.error('Error fetching snapToken:', error);
         }
