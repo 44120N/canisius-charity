@@ -5,7 +5,9 @@ function About(){
     
     return (
       <div className="about">
-          <button onClick={handleClick}>Click me</button>
+          <div className="content">
+            
+          </div>
       </div>
     );
 }

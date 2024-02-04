@@ -1,22 +1,22 @@
 -- CREATE TABLE seats(
---     id VARCHAR(3) PRIMARY KEY,
+--     id VARCHAR(4) PRIMARY KEY,
 --     isAvailable BOOLEAN NOT NULL,
 --     isOrder BOOLEAN NOT NULL,
 --     isVIP BOOLEAN NOT NULL,
 --     owner_id VARCHAR(50)
 -- );
 
--- INSERT INTO seats(id, isAvailable, isOrder, isVIP, owner_id) VALUES
--- ('A0', true, false, true, NULL),
--- ('A1', true, false, true, NULL),
--- ('A2', true, false, true, NULL),
--- ('A3', true, false, true, NULL),
--- ('A4', false, false, true, NULL),
--- ('A5', true, false, false, NULL),
--- ('A6', true, false, false, NULL),
--- ('A7', true, false, false, NULL),
--- ('A8', true, false, false, NULL),
--- ('A9', true, false, false, NULL)
+INSERT INTO seats(id, isAvailable, isOrder, isVIP, owner_id) VALUES
+('C1', true, false, true, NULL),
+('C2', true, false, true, NULL),
+('C3', true, false, true, NULL),
+('C4', true, false, true, NULL),
+('C5', false, false, true, NULL),
+('C6', true, false, false, NULL),
+('C7', true, false, false, NULL),
+('C8', true, false, false, NULL),
+('C9', true, false, false, NULL),
+('C10', true, false, false, NULL)
 
 -- UPDATE seats SET isOrder = false WHERE id = 'A2';
 -- UPDATE seats SET isAvailable = false WHERE id = 'A9';

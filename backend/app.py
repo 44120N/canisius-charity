@@ -1,14 +1,15 @@
-import os, requests, dotenv
+import os, requests, dotenv, random
 # from flask_oauthlib.client import OAuth
 # from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from flask import Flask, jsonify, session, redirect, url_for, request
 from flask_cors import CORS
 from flask_marshmallow import Marshmallow
 from models import db, Seat, User
+import midtransclient
 
 dotenv.load_dotenv()
 
-app = Flask(__name__, static_folder='../myapp/build')
+app = Flask(__name__)
 CORS(app)
 
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
@@ -54,6 +55,38 @@ userSchema = UserSchema(many=True)
 #     authorize_url='https://accounts.google.com/o/oauth2/auth',
 # )
 
+snap = midtransclient.Snap(
+    is_production=False,
+    server_key=os.getenv('SANDBOX_MIDTRANS_SERVER_KEY')
+)
+
+parameter_price = 100
+parameter_freq = 1
+
+parameter = {
+    "transaction_details": {
+        "order_id": (random.randint(1, 100)*10)+random.randint(1, 100),
+        "gross_amount": parameter_price*parameter_freq
+    },
+    "credit_card": {
+        "secure": True,
+    },
+    "item_details": {
+        "name": "test",
+        "price": parameter_price,
+        "quantity": parameter_freq
+    },
+    "customer_details": {
+        "first_name": "",
+        "last_name": "",
+        "email": "aaronhartono28@gmail.com",
+    },
+}
+
+parameter["transaction_details"]["gross_amount"] = parameter["item_details"]["price"]*parameter["item_details"]["quantity"]
+transaction = snap.create_transaction(parameter)
+transaction_token = transaction['token']
+
 @app.route('/api/seat/<seat_id>', methods=['GET', 'POST'])
 def get_seat_status(seat_id):
     seat = Seat.query.get(seat_id)
@@ -89,6 +122,42 @@ def get_all_users():
     users = User.query.all()
     result = userSchema.dump(users)
     return jsonify(result)
+
+@app.route('/api/tokenizer/<user_email>', methods=['GET', 'POST'])
+def post_token(user_email):
+    if request.method == 'POST':
+        data = request.get_json()
+        parameter_price = data["price"]
+        parameter_freq = 1
+
+        parameter = {
+            "transaction_details": {
+                "order_id": (random.randint(1, 100) * 10) + random.randint(1, 100),
+                "gross_amount": parameter_price * parameter_freq
+            },
+            "credit_card": {
+                "secure": True,
+            },
+            "item_details": [{
+                "name": data["id"],
+                "price": parameter_price,
+                "quantity": parameter_freq
+            }],
+            "customer_details": {
+                "first_name": data["first_name"],
+                "last_name": data["last_name"],
+                "email": data["email"],
+            },
+        }
+
+        parameter["transaction_details"]["gross_amount"] = parameter["item_details"][0]["price"] * \
+                                                           parameter["item_details"][0]["quantity"]
+        transaction = snap.create_transaction(parameter)
+        transaction_token = transaction['token']
+        transaction_url = transaction['redirect_url']
+        return jsonify({"token": transaction_token, "redirect_url": transaction_url})
+    elif request.method == 'GET':
+        return jsonify({"token": transaction_token, "redirect_url": transaction_url})
 
 @app.after_request
 def after_request(response):

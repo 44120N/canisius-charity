@@ -6,6 +6,14 @@ const Home = () => {
     const date = "01-02-2024";
     const time = "09:00";
     const { seat, cost } = useSeat();
+
+    const rupiah = (number) => {
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+        }).format(number);
+    }
+
     return (
         <div className="about">
             <div className="content">
@@ -33,7 +41,7 @@ const Home = () => {
                         <h3>Canisius College Event</h3>
                         <p>Seats: { seat.sort().join(", ") }</p>
                         <p>Date: { date }, Time: { time }</p>
-                        <p>Total Payment: { cost }</p>
+                        <p>Total Payment: { rupiah(cost) }</p>  
                     </div>
                 </div>
                 <div className="seats">

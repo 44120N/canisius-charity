@@ -8,6 +8,8 @@ import About from "./pages/About";
 import Donate from "./pages/Donate";
 import { UserProvider } from './UserContext';
 import { SeatProvider } from './SeatContext';
+import { SnapProvider } from './SnapContext';
+import Footer from "./components/Footer.js";
 
 export default function App() {
   return (
@@ -27,7 +29,10 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <UserProvider>
     <SeatProvider>
-      <App />
+      <SnapProvider>
+        <App />
+        <Footer/>
+      </SnapProvider>
     </SeatProvider>
   </UserProvider>
 );

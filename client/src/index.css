@@ -69,7 +69,10 @@ body{
     align-items: center;
 }
 .about{
-  padding: calc(var(--header-height) + 3vh) 8%;
+  padding-top: calc(var(--header-height) + 3vh);
+  padding-left: 8%;
+  padding-right: 8%;
+  padding-bottom: 3vh;
 }
 .content{
   background: var(--first-color);
@@ -165,53 +168,6 @@ td, th{
     align-items: center;
 }
 
-/* FOOTER */
-.footer{
-    background-color: var(--third-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  
-    position: relative;
-    width: 100%;
-    min-height: 100px;
-    padding: 20px 50px;
-}
-.footer .social-icon{
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 10px 0;
-    flex-wrap: wrap;
-}
-.footer .social-icon li{
-    list-style: none;
-}
-.footer .social-icon li a{
-    font-size: 2em;
-    color: var(--first-color);
-    margin: 0 10px;
-    display: inline-block;
-    transition: 0.5s;
-}
-.footer .social-icon li a:hover{
-    color: var(--hover-color);
-    transform: translateY(-10px);
-}
-.footer img{
-    max-height: 100px;
-    width: auto;
-}
-.footer p{
-    color: #fff;
-    text-align: center;
-    margin-top: 15px;
-    margin-bottom: 10px;
-    font-size: 1.1em;
-}
-
 /* FORM */
 .form{
     background: var(--first-color);
@@ -282,9 +238,15 @@ td input{
 }
 
 button{
-    padding: 1%;
+    padding: 0;
     color: white;
     cursor: pointer;
+}
+
+.table{
+    height: 40vh;
+    margin: 5vh 0 5vh 0;
+    overflow: auto;
 }
 
 .circle-image {
@@ -293,4 +255,133 @@ button{
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
+    max-width: 10vh;
+}
+
+.table__flex{
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+#A{
+    margin-top: 36px;
+}
+
+#VVIP{
+    margin-top: 14px;
+}
+
+/* #E{
+    margin-top: 34px;
+} */
+
+
+/* .table__flex.vvip{
+    
+} */
+
+.imageLayout{
+    display: flex;
+    margin: 0 auto 0 auto;
+    max-width: 60vw;
+}
+
+
+.table__side tbody tr td div button{
+    margin: 1px;
+    border: none;
+    padding: 0;
+    width: 35px;
+}
+
+.table__mid tbody tr td div button{
+    margin: 1px;
+    padding: 0;
+    border: none;
+    width: 35px;
+}
+
+.justify-end{
+    justify-content: end;
+}
+
+#table__mother{
+    display: flex;
+}
+
+/* .table__right, .table__center, .table__left{
+    display: flex;
+} */
+
+.table__panggung{
+    margin: 0 auto 0 600px;
+    background-color: crimson;
+    width: 1000px;
+    height: 100px;
+    color: var(--first-color);
+    font-size: 3vh;
+}
+
+
+
+.input-group {
+    display: flex;
+    align-content: stretch;
+}
+  
+.input-group > input {
+    flex: 1 0 auto;
+    padding: 0 0 0 3vh;
+}
+
+.input-group-addon {
+    background: #eee;
+    border: 1px solid #ccc;
+    padding: 0.5em 1em;
+}
+
+
+.donate{
+    padding: 5vh;
+    color: var(--fourth-color);
+    height: 30vh;
+}
+
+.donate h1{
+    margin: 0 0 3vh 0;
+}
+
+
+#donate-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 3vh auto 3vh auto;
+    transition: 0.5s ease-in-out;
+    color: var(--fourth-color);
+    background-color: var(--gold-color);
+    border: none;
+    width: 14.5vh;
+    height: 4.5vh;
+    border-radius: 8px;
+    box-shadow: none;
+    font-size: 20px;
+}
+
+#donate-button:hover{
+    width: 15vh;
+    height: 4.5vh;
+    -webkit-box-shadow: -1px 13px 41px -20px rgba(66, 68, 90, 1);
+    -moz-box-shadow: -1px 13px 41px -20px rgba(66, 68, 90, 1);
+    box-shadow: -1px 13px 41px -20px rgba(66, 68, 90, 1);
+    font-size: 23px;
+}
+
+
+.about{
+    min-height: 90vh;
+}
+
+.footer{
+    background-color: var(--CC-blue);
 }
