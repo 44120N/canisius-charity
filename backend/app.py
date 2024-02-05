@@ -87,29 +87,13 @@ parameter["transaction_details"]["gross_amount"] = parameter["item_details"]["pr
 transaction = snap.create_transaction(parameter)
 transaction_token = transaction['token']
 
-@app.route('/api/seat/<seat_id>', methods=['GET', 'POST'])
+@app.route('/api/seat/<seat_id>', methods=['GET'])
 def get_seat_status(seat_id):
     seat = Seat.query.get(seat_id)
-    if request.method == 'GET':
-        if seat:
-            return jsonify({'id': seat.id, 'isAvailable': seat.isAvailable, 'isVIP': seat.isVIP, 'isVVIP': seat.isVVIP, 'owner_id': seat.owner_id})
-        else:
-            return jsonify({'error': 'Seat not found'}), 404
-    elif request.method == 'POST':
-        if seat:
-            try:
-                data = request.get_json()
-                seat.isOrder = data.get('isOrder', seat.isOrder)
-                db.session.commit()
-                return jsonify({'message': f'Seat {seat_id} order status updated successfully'}), 200
-            except Exception as e:
-                db.session.rollback()
-                print(f'Error updating seat {seat_id} order status: {e}')
-                return jsonify({'error': str(e)}), 500
-        else:
-            return jsonify({'error': 'Seat not found'}), 404
+    if seat:
+        return jsonify({'id': seat.id, 'isAvailable': seat.isAvailable, 'isVIP': seat.isVIP, 'isVVIP': seat.isVVIP, 'owner_id': seat.owner_id})
     else:
-        return jsonify({'error': 'Method does not support'}), 404
+        return jsonify({'error': 'Seat not found'}), 404
 
 @app.route('/api/seats', methods=['GET'])
 def get_all_seats():
@@ -117,11 +101,14 @@ def get_all_seats():
     result = seatSchema.dump(seats)
     return jsonify(result)
 
-@app.route('/api/users', methods=['GET'])
+@app.route('/api/users', methods=['GET', 'POST'])
 def get_all_users():
-    users = User.query.all()
-    result = userSchema.dump(users)
-    return jsonify(result)
+    if request.method == 'GET':
+        users = User.query.all()
+        result = userSchema.dump(users)
+        return jsonify(result)
+    elif request.method == 'POST':
+       data = request.get_json()
 
 @app.route('/api/tokenizer/<user_email>', methods=['GET', 'POST'])
 def post_token(user_email):

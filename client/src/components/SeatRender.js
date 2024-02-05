@@ -985,7 +985,7 @@ function SeatLayout() {
             </tr>
             </div>
         </table>
-        <div className="table__panggung center">Panggung</div>
+        <div className="table__panggung center">Stage</div>
       </div>
     </>
     );

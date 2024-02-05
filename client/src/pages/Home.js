@@ -38,7 +38,7 @@ const Home = () => {
                     </div>
                     <div className="seperator"></div>
                     <div className="event__info">
-                        <h3>Canisius College Event</h3>
+                        <h3>Canisius College Charity Concert</h3>
                         <p>Seats: { seat.sort().join(", ") }</p>
                         <p>Date: { date }, Time: { time }</p>
                         <p>Total Payment: { rupiah(cost) }</p>  

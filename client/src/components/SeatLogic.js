@@ -53,7 +53,6 @@ const SeatLogic = () => {
   const handleClick = async () => {
     if (isLoggedIn) {
       if (cost !== 0) {
-        // console.log(snapToken);
         const transaction_data = {
           id: seat, 
           price: cost, 
@@ -67,25 +66,43 @@ const SeatLogic = () => {
           const requestData = await response.data;
           console.log(requestData.token);
           console.log(requestData.redirect_url);
-          if(requestData.token){
+          if (requestData.token) {
             window.snap.pay(requestData.token, {
-              onSuccess: function(result){
-                alert("payment success!"); 
+              onSuccess: function (result) {
+                alert("payment success!");
+                console.log(result);
+          
+                axios.get('/api/seats')
+                  .then(response => {
+                    const user_seat = response.data.owned_seat;
+                    return user_seat;
+                  })
+                  .then(user_seat => {
+                    const updatedUserSeat = [...user_seat, seat];
+                    const user_data = {
+                      id: user.email,
+                      owned_seat: updatedUserSeat
+                    };
+                    return axios.post("/api/users", user_data);
+                  })
+                  .then(response => {
+                    console.log('User seats updated successfully:', response.data);
+                  })
+                  .catch(error => console.error('Error updating user seats:', error));
+              },
+              onPending: function (result) {
+                alert("waiting for your payment!");
                 console.log(result);
               },
-              onPending: function(result){
-                alert("wating your payment!"); 
+              onError: function (result) {
+                alert("payment failed!");
                 console.log(result);
               },
-              onError: function(result){
-                alert("payment failed!"); 
-                console.log(result);
-              },
-              onClose: function(){
+              onClose: function () {
                 alert('you closed the popup without finishing the payment');
               }
-            })
-          }
+            });
+          }          
         } catch (error) {
           console.error('Error fetching snapToken:', error);
         }
