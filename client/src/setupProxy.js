@@ -3,7 +3,7 @@ module.exports = function (app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'https://charityconcert.kanisius.sch.id/',
+      target: 'http://localhost:5000',
       changeOrigin: true
     })
   );
