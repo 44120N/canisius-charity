@@ -9,7 +9,7 @@ import midtransclient
 
 dotenv.load_dotenv()
 
-app = Flask(__name__, static_folder="../client/build", static_url_path='')
+app = Flask(__name__)
 CORS(app)
 
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
