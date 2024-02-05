@@ -9,7 +9,7 @@ import midtransclient
 
 dotenv.load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../client/build", static_url_path='')
 CORS(app)
 
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
@@ -30,7 +30,7 @@ ma = Marshmallow(app)
 
 class SeatSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'isAvailable', 'isVIP', 'owner_id')
+        fields = ('id', 'isAvailable', 'isVIP', 'isVVIP', 'owner_id')
 seatSchema = SeatSchema(many=True)
 
 class UserSchema(ma.Schema):
@@ -92,7 +92,7 @@ def get_seat_status(seat_id):
     seat = Seat.query.get(seat_id)
     if request.method == 'GET':
         if seat:
-            return jsonify({'id': seat.id, 'isAvailable': seat.isAvailable, 'isVIP': seat.isVIP, 'owner_id': seat.owner_id})
+            return jsonify({'id': seat.id, 'isAvailable': seat.isAvailable, 'isVIP': seat.isVIP, 'isVVIP': seat.isVVIP, 'owner_id': seat.owner_id})
         else:
             return jsonify({'error': 'Seat not found'}), 404
     elif request.method == 'POST':

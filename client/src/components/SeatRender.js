@@ -532,7 +532,7 @@ function SeatLayout() {
                         </td>
                         <td>
                           <div className="table__flex justify-end">
-                            { SeatButton("A09") }
+                            { SeatButton("A9") }
                             { SeatButton("A10") }
                             { SeatButton("A11") }
                             { SeatButton("A12") }

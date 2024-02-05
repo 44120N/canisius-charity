@@ -70,7 +70,6 @@ const SeatLogic = () => {
           if(requestData.token){
             window.snap.pay(requestData.token, {
               onSuccess: function(result){
-                
                 alert("payment success!"); 
                 console.log(result);
               },
