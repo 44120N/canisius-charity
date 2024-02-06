@@ -28,12 +28,20 @@ const Home = () => {
                             <p>Selected</p>
                         </span>
                         <span>
+                            <i className="ri-square-fill" id='yellow'></i>
+                            <p>VVIP</p>
+                        </span>
+                        <span>
                             <i className="ri-square-fill" id='gold'></i>
                             <p>VIP</p>
                         </span>
                         <span>
                             <i className="ri-square-fill" id='red'></i>
                             <p>Sold</p>
+                        </span>
+                        <span>
+                            <i className="ri-square-fill" id='black'></i>
+                            <p>Reserved</p>
                         </span>
                     </div>
                     <div className="seperator"></div>

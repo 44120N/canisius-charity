@@ -7,6 +7,7 @@ const BLUE = "var(--blue-color)";
 const RED = "var(--red-color)";
 const GREEN = "var(--green-color)";
 const GOLD = "var(--gold-color)";
+const YELLOW = "var(--yellow-color)";
 const seatCGap = "32px";
 const seatEGap = "175px";
 
@@ -22,7 +23,7 @@ function SeatLayout() {
   
   const renderSeatButtons = () => {
     return (<>
-    <img className="imageLayout" src={seatLayout}/>
+    {/* <img className="imageLayout" src={seatLayout}/> */}
     <div className="table">
         <table id="table__mother">
             <div className="table__left">
@@ -629,9 +630,9 @@ function SeatLayout() {
                         </td>
                         <td>
                           <div className="table__flex vvip">
-                            { SeatButton("V07") }
-                            { SeatButton("V08") }
-                            { SeatButton("V09") }
+                            { SeatButton("V7") }
+                            { SeatButton("V8") }
+                            { SeatButton("V9") }
                             { SeatButton("V10") }
                             { SeatButton("V11") }
                             { SeatButton("V12") }
@@ -1020,7 +1021,7 @@ function SeatLayout() {
     
     const getSeatColor = () => {
       if (foundSeat) {
-        return isOrder ? BLUE : foundSeat.isAvailable ? foundSeat.isVIP ? GOLD : GREEN : RED;
+        return isOrder ? BLUE : foundSeat.isAvailable ? foundSeat.isVVIP ? YELLOW : foundSeat.isVIP ? GOLD : GREEN : RED;
       }
       return "#000";
     };

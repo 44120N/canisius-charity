@@ -15,6 +15,7 @@
     --green-color: rgb(131, 193, 103);
     --blue-color: rgb(88, 196, 221);
     --gold-color: rgb(240, 172, 95);
+    --yellow-color: rgb(244, 211, 69);
 
     /* Font */
     --body-font: 'Inconsolata', sans-serif;
@@ -112,6 +113,12 @@ body{
 }
 .about i#gold{
     color: var(--gold-color);
+}
+.about i#yellow{
+    color: var(--yellow-color);
+}
+.about i#black{
+    color: #000;
 }
 
 .lineh{
