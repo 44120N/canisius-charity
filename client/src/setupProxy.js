@@ -3,7 +3,7 @@ module.exports = function (app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'https://apicharity.cccup.id',
+      target: 'https://api-charity.kanisius.sch.id',
       changeOrigin: true
     })
   );
