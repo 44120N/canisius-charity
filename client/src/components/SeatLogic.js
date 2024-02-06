@@ -71,24 +71,31 @@ const SeatLogic = () => {
               onSuccess: function (result) {
                 alert("payment success!");
                 console.log(result);
-          
-                axios.get('/api/seats')
-                  .then(response => {
-                    const user_seat = response.data.owned_seat;
-                    return user_seat;
-                  })
-                  .then(user_seat => {
-                    const updatedUserSeat = [...user_seat, seat];
+            
+                axios.get(`/api/users/${user.email}`)
+                .then(response => {
+                  const data = response.data;
+                  console.log(data);
+                  if (data != null) {
                     const user_data = {
                       id: user.email,
-                      owned_seat: updatedUserSeat
+                      owned_seat: [...data.owned_seat, seat]
                     };
-                    return axios.post("/api/users", user_data);
-                  })
-                  .then(response => {
-                    console.log('User seats updated successfully:', response.data);
-                  })
-                  .catch(error => console.error('Error updating user seats:', error));
+                    console.log(user_data);
+                    return axios.put(`/api/users/${user.email}`, user_data);
+                  } else {
+                    const user_data = {
+                      id: user.email,
+                      owned_seat: [seat]
+                    };
+                    console.log(user_data);
+                    return axios.post(`/api/users/${user.email}`, user_data);
+                  }
+                })
+                .then(response => {
+                  console.log('User seats updated successfully:', response.data);
+                })
+                .catch(error => console.error('Error updating user seats:', error));
               },
               onPending: function (result) {
                 alert("waiting for your payment!");

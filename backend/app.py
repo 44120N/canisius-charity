@@ -109,7 +109,53 @@ def get_all_users():
         return jsonify(result)
     elif request.method == 'POST':
        data = request.get_json()
+       id = data.get('id')
+       owned_seat = data.get('owned_seat')
+       new_user = User(id=id, owned_seat=owned_seat)
+       try:
+           db.session.add(new_user)
+           db.session.commit()
+           return jsonify({'message': 'User added successfully'})
+       except Exception as e:
+           db.session.rollback()
+           return jsonify({'error': str(e)}), 500
 
+@app.route('/api/users/<user_email>', methods=['GET', 'POST', 'PUT'])
+def handle_user(user_email):
+    if request.method == 'GET':
+        user = User.query.filter_by(id=user_email).first()
+        if user:
+            result = userSchema.dump(user)
+            return jsonify(result)
+        else:
+            return jsonify()
+    elif request.method == 'POST':
+        data = request.get_json()
+        id = data.get('id')
+        owned_seat = data.get('owned_seat')
+        new_user = User(id=id, owned_seat=owned_seat)
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            return jsonify({'message': 'User added successfully'})
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': str(e)}), 500
+    elif request.method == 'PUT':
+        data = request.get_json()
+        owned_seat = data.get('owned_seat')
+        user = User.query.filter_by(id=user_email).first()
+        if user:
+            user.owned_seat = owned_seat
+            try:
+                db.session.commit()
+                return jsonify({'message': 'User seats updated successfully'})
+            except Exception as e:
+                db.session.rollback()
+                return jsonify({'error': str(e)}), 500
+        else:
+            return jsonify({'error': 'User not found'}), 404
+       
 @app.route('/api/tokenizer/<user_email>', methods=['GET', 'POST'])
 def post_token(user_email):
     if request.method == 'POST':
