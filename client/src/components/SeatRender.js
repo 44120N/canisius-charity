@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSeat } from '../SeatContext';
-import seatLayout from "../assets/null.png"
+// import seatLayout from "../assets/null.png"
 
 const BLUE = "var(--blue-color)";
 const RED = "var(--red-color)";
@@ -16,7 +16,7 @@ function SeatLayout() {
   const { seat, updateSeat } = useSeat([]);
 
   useEffect(() => {
-    axios.get('/api/seats')
+    axios.get('https://api-charity.kanisius.sch.id/api/seats')
     .then(response => setSeats(response.data))
     .catch(error => console.error('Error fetching seat data:', error));
   }, [seat]);

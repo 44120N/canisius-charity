@@ -18,7 +18,7 @@ const SeatLogic = () => {
   
         for (const seatID of seat) {
           try {
-            const response = await axios.get(`/api/seat/${seatID}`);
+            const response = await axios.get(`https://api-charity.kanisius.sch.id/api/seat/${seatID}`);
             const seatData = response.data;
   
             if (seatData.isVIP) {
@@ -62,7 +62,7 @@ const SeatLogic = () => {
         }
 
         try {
-          const response = await axios.post(`/api/tokenizer/${user.email}`, transaction_data);
+          const response = await axios.post(`https://api-charity.kanisius.sch.id/api/tokenizer/${user.email}`, transaction_data);
           const requestData = await response.data;
           console.log(requestData.token);
           console.log(requestData.redirect_url);
@@ -72,7 +72,7 @@ const SeatLogic = () => {
                 alert("payment success!");
                 console.log(result);
             
-                axios.get(`/api/users/${user.email}`)
+                axios.get(`https://api-charity.kanisius.sch.id/api/users/${user.email}`)
                 .then(response => {
                   const data = response.data;
                   console.log(data);
@@ -82,14 +82,14 @@ const SeatLogic = () => {
                       owned_seat: [...data.owned_seat, seat]
                     };
                     console.log(user_data);
-                    return axios.put(`/api/users/${user.email}`, user_data);
+                    return axios.put(`https://api-charity.kanisius.sch.id/api/users/${user.email}`, user_data);
                   } else {
                     const user_data = {
                       id: user.email,
                       owned_seat: [seat]
                     };
                     console.log(user_data);
-                    return axios.post(`/api/users/${user.email}`, user_data);
+                    return axios.post(`https://api-charity.kanisius.sch.id/api/users/${user.email}`, user_data);
                   }
                 })
                 .then(response => {
