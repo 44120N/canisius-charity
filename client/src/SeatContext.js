@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState,  } from 'react';
 
 const SeatContext = createContext();
 
@@ -6,13 +6,6 @@ export const SeatProvider = ({ children }) => {
   const [seat, setSeat] = useState([]);
   const [cost, setCost] = useState(0);
 
-  useEffect(() => {
-    const storedSeat = localStorage.getItem('seat');
-    if (storedSeat) {
-      setSeat(JSON.parse(storedSeat));
-    }
-  }, []);
-  
   useEffect(() => {
     localStorage.setItem('seat', JSON.stringify(seat));
   }, [seat]);

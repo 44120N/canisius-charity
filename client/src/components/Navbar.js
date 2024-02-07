@@ -8,40 +8,20 @@ import { useUser } from '../UserContext';
 
 const Navbar = () => {
   const { user, updateUser } = useUser();
-  const [isSidebarVisible, setIsSidebarVisible] = useState();
-  const [isSignIn, setIsSignIn] = useState(false);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
   const handleCallbackResponse = useCallback(response => {
     var userObject = jwtDecode(response.credential);
     console.log(userObject);
     updateUser(userObject);
-    setIsSignIn(true);
+    document.getElementById("signInSidebar").hidden = true;
+    document.getElementById("signInMain").hidden = true;
   }, [updateUser]);
-
-  useEffect(() => {
-    const storedSignIn = localStorage.getItem('isSignIn');
-    if (storedSignIn) {
-      setIsSignIn(JSON.parse(storedSignIn));
-    }
-  }, []);
-  
-  useEffect(() => {
-    localStorage.setItem('isSignIn', JSON.stringify(isSignIn));
-  }, [isSignIn]);
-
-  useEffect(()=>{
-    if (isSignIn) {
-      document.getElementById("signInSidebar").hidden = true;
-      document.getElementById("signInMain").hidden = true;
-    } else {
-      document.getElementById("signInSidebar").hidden = false;
-      document.getElementById("signInMain").hidden = false;
-    }
-  }, [user]);
 
   function handleSignOut(event){
     updateUser({});
-    setIsSignIn(false);
+    document.getElementById("signInSidebar").hidden = false;
+    document.getElementById("signInMain").hidden = false;
   }
 
   useEffect(() => {
