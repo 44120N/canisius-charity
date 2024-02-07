@@ -5,8 +5,26 @@ import axios from 'axios';
 
 const SeatLogic = () => {
   const { user } = useUser();
-  const { seat, cost, updateCost } = useSeat();
+  const { seat, updateSeat, cost, updateCost } = useSeat();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(()=>{
+    if (isSuccess) {
+      seat.forEach(seatID => {
+        axios.post(`${process.env.REACT_APP_API_URL}/api/seat/${seatID}/post`, {
+          owner_id: user.email
+        })
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.error('Error updating seat:', error);
+        });
+      });
+      setIsSuccess(false);
+    }
+  }, [isSuccess]);
 
   useEffect(() => {
       setIsLoggedIn(!!user.email);
@@ -18,7 +36,7 @@ const SeatLogic = () => {
   
         for (const seatID of seat) {
           try {
-            const response = await axios.get(`https://api-charity.kanisius.sch.id/api/seat/${seatID}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/seat/${seatID}`);
             const seatData = response.data;
   
             if (seatData.isVIP) {
@@ -62,40 +80,42 @@ const SeatLogic = () => {
         }
 
         try {
-          const response = await axios.post(`https://api-charity.kanisius.sch.id/api/tokenizer/${user.email}`, transaction_data);
+          const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/tokenizer/${user.email}`, transaction_data);
           const requestData = await response.data;
           console.log(requestData.token);
           console.log(requestData.redirect_url);
+          console.log(seat);
           if (requestData.token) {
             window.snap.pay(requestData.token, {
               onSuccess: function (result) {
-                alert("payment success!");
-                console.log(result);
-            
-                axios.get(`https://api-charity.kanisius.sch.id/api/users/${user.email}`)
-                .then(response => {
-                  const data = response.data;
-                  console.log(data);
-                  if (data != null) {
-                    const user_data = {
-                      id: user.email,
-                      owned_seat: [...data.owned_seat, seat]
-                    };
-                    console.log(user_data);
-                    return axios.put(`https://api-charity.kanisius.sch.id/api/users/${user.email}`, user_data);
-                  } else {
-                    const user_data = {
-                      id: user.email,
-                      owned_seat: [seat]
-                    };
-                    console.log(user_data);
-                    return axios.post(`https://api-charity.kanisius.sch.id/api/users/${user.email}`, user_data);
-                  }
-                })
-                .then(response => {
-                  console.log('User seats updated successfully:', response.data);
-                })
-                .catch(error => console.error('Error updating user seats:', error));
+                setIsSuccess(true);
+                // alert("payment success!");
+                // console.log(result);
+
+                // axios.get(`${process.env.REACT_APP_API_URL}/api/users/${user.email}`)
+                // .then(response => {
+                //   const data = response.data;
+                //   console.log(data);
+                //   if (data != null) {
+                //     const user_data = {
+                //       id: user.email,
+                //       owned_seat: [...data.owned_seat, seat]
+                //     };
+                //     console.log(user_data);
+                //     return axios.put(`${process.env.REACT_APP_API_URL}/api/users/${user.email}`, user_data);
+                //   } else {
+                //     const user_data = {
+                //       id: user.email,
+                //       owned_seat: [seat]
+                //     };
+                //     console.log(user_data);
+                //     return axios.post(`${process.env.REACT_APP_API_URL}/api/users/${user.email}`, user_data);
+                //   }
+                // })
+                // .then(response => {
+                //   console.log('User seats updated successfully:', response.data);
+                // })
+                // .catch(error => console.error('Error updating user seats:', error));
               },
               onPending: function (result) {
                 alert("waiting for your payment!");

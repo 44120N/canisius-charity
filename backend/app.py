@@ -1,6 +1,4 @@
-import os, requests, dotenv, random
-# from flask_oauthlib.client import OAuth
-# from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+import os, requests, dotenv, random, datetime
 from flask import Flask, jsonify, session, redirect, url_for, request
 from flask_cors import CORS
 from flask_marshmallow import Marshmallow
@@ -13,14 +11,11 @@ app = Flask(__name__)
 CORS(app)
 
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URL")
-# app.config['GOOGLE_ID'] = os.getenv("GOOGLE_CLIENT_ID")
-# app.config['GOOGLE_SECRET'] = os.getenv("GOOGLE_CLIENT_SECRET")
-# app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
+timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-# jwt = JWTManager(app)
 db.init_app(app)
 with app.app_context():
     db.create_all()
@@ -38,26 +33,10 @@ class UserSchema(ma.Schema):
         fields = ('id', 'owned_seat')
 userSchema = UserSchema(many=True)
 
-# Google OAuth
-# oauth = OAuth(app)
-
-# google = oauth.remote_app(
-#     'google',
-#     consumer_key=app.config['GOOGLE_ID'],
-#     consumer_secret=app.config['GOOGLE_SECRET'],
-#     request_token_params={
-#         'scope': 'email',
-#     },
-#     base_url='https://www.googleapis.com/oauth2/v1/',
-#     request_token_url=None,
-#     access_token_method='POST',
-#     access_token_url='https://accounts.google.com/o/oauth2/token',
-#     authorize_url='https://accounts.google.com/o/oauth2/auth',
-# )
-
 snap = midtransclient.Snap(
     is_production=False,
-    server_key=os.getenv('SANDBOX_MIDTRANS_SERVER_KEY')
+    server_key=os.getenv('SANDBOX_MIDTRANS_SERVER_KEY'),
+    client_key=os.getenv('SANDBOX_MIDTRANS_CLIENT_KEY')
 )
 
 parameter_price = 100
@@ -65,7 +44,7 @@ parameter_freq = 1
 
 parameter = {
     "transaction_details": {
-        "order_id": (random.randint(1, 100)*10)+random.randint(1, 100),
+        "order_id": "#ID " + str(timestamp),
         "gross_amount": parameter_price*parameter_freq
     },
     "credit_card": {
@@ -95,66 +74,83 @@ def get_seat_status(seat_id):
     else:
         return jsonify({'error': 'Seat not found'}), 404
 
+@app.route('/api/seat/<seat_id>/post', methods=['POST'])
+def post_seat_status(seat_id):
+    seat = Seat.query.get(seat_id)
+    if seat:
+        data = request.get_json()
+        try:
+            seat.isAvailable = False
+            seat.owner_id = data['owner_id']
+            db.session.commit()
+            return jsonify({'message': f'Seat {seat_id} updated successfully'}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': str(e)}), 500
+    else:
+        return jsonify({'error': 'Seat not found'}), 404
+
+
 @app.route('/api/seats', methods=['GET'])
 def get_all_seats():
     seats = Seat.query.all()
     result = seatSchema.dump(seats)
     return jsonify(result)
 
-@app.route('/api/users', methods=['GET', 'POST'])
-def get_all_users():
-    if request.method == 'GET':
-        users = User.query.all()
-        result = userSchema.dump(users)
-        return jsonify(result)
-    elif request.method == 'POST':
-       data = request.get_json()
-       id = data.get('id')
-       owned_seat = data.get('owned_seat')
-       new_user = User(id=id, owned_seat=owned_seat)
-       try:
-           db.session.add(new_user)
-           db.session.commit()
-           return jsonify({'message': 'User added successfully'})
-       except Exception as e:
-           db.session.rollback()
-           return jsonify({'error': str(e)}), 500
+# @app.route('/api/users', methods=['GET', 'POST'])
+# def get_all_users():
+#     if request.method == 'GET':
+#         users = User.query.all()
+#         result = userSchema.dump(users)
+#         return jsonify(result)
+#     elif request.method == 'POST':
+#        data = request.get_json()
+#        id = data.get('id')
+#        owned_seat = data.get('owned_seat')
+#        new_user = User(id=id, owned_seat=owned_seat)
+#        try:
+#            db.session.add(new_user)
+#            db.session.commit()
+#            return jsonify({'message': 'User added successfully'})
+#        except Exception as e:
+#            db.session.rollback()
+#            return jsonify({'error': str(e)}), 500
 
-@app.route('/api/users/<user_email>', methods=['GET', 'POST', 'PUT'])
-def handle_user(user_email):
-    if request.method == 'GET':
-        user = User.query.filter_by(id=user_email).first()
-        if user:
-            result = userSchema.dump(user)
-            return jsonify(result)
-        else:
-            return jsonify()
-    elif request.method == 'POST':
-        data = request.get_json()
-        id = data.get('id')
-        owned_seat = data.get('owned_seat')
-        new_user = User(id=id, owned_seat=owned_seat)
-        try:
-            db.session.add(new_user)
-            db.session.commit()
-            return jsonify({'message': 'User added successfully'})
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({'error': str(e)}), 500
-    elif request.method == 'PUT':
-        data = request.get_json()
-        owned_seat = data.get('owned_seat')
-        user = User.query.filter_by(id=user_email).first()
-        if user:
-            user.owned_seat = owned_seat
-            try:
-                db.session.commit()
-                return jsonify({'message': 'User seats updated successfully'})
-            except Exception as e:
-                db.session.rollback()
-                return jsonify({'error': str(e)}), 500
-        else:
-            return jsonify({'error': 'User not found'}), 404
+# @app.route('/api/users/<user_email>', methods=['GET', 'POST', 'PUT'])
+# def handle_user(user_email):
+#     if request.method == 'GET':
+#         user = User.query.filter_by(id=user_email).first()
+#         if user:
+#             result = userSchema.dump(user)
+#             return jsonify(result)
+#         else:
+#             return jsonify()
+#     elif request.method == 'POST':
+#         data = request.get_json()
+#         id = data.get('id')
+#         owned_seat = data.get('owned_seat')
+#         new_user = User(id=id, owned_seat=owned_seat)
+#         try:
+#             db.session.add(new_user)
+#             db.session.commit()
+#             return jsonify({'message': 'User added successfully'})
+#         except Exception as e:
+#             db.session.rollback()
+#             return jsonify({'error': str(e)}), 500
+#     elif request.method == 'PUT':
+#         data = request.get_json()
+#         owned_seat = data.get('owned_seat')
+#         user = User.query.filter_by(id=user_email).first()
+#         if user:
+#             user.owned_seat = owned_seat
+#             try:
+#                 db.session.commit()
+#                 return jsonify({'message': 'User seats updated successfully'})
+#             except Exception as e:
+#                 db.session.rollback()
+#                 return jsonify({'error': str(e)}), 500
+#         else:
+#             return jsonify({'error': 'User not found'}), 404
        
 @app.route('/api/tokenizer/<user_email>', methods=['GET', 'POST'])
 def post_token(user_email):

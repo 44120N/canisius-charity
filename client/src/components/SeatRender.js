@@ -16,7 +16,7 @@ function SeatLayout() {
   const { seat, updateSeat } = useSeat([]);
 
   useEffect(() => {
-    axios.get('https://api-charity.kanisius.sch.id/api/seats')
+    axios.get(`${process.env.REACT_APP_API_URL}/api/seats`)
     .then(response => setSeats(response.data))
     .catch(error => console.error('Error fetching seat data:', error));
   }, [seat]);
@@ -1021,7 +1021,7 @@ function SeatLayout() {
     
     const getSeatColor = () => {
       if (foundSeat) {
-        return isOrder ? BLUE : foundSeat.isAvailable ? foundSeat.isVVIP ? YELLOW : foundSeat.isVIP ? GOLD : GREEN : RED;
+        return foundSeat.isVVIP ? YELLOW : isOrder ? BLUE : foundSeat.isAvailable ? foundSeat.isVIP ? GOLD : GREEN : RED;
       }
       return "#000";
     };

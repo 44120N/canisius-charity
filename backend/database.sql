@@ -1,10 +1,10 @@
-CREATE TABLE seats(
-    id VARCHAR(4) PRIMARY KEY,
-    isAvailable BOOLEAN NOT NULL,
-    isVIP BOOLEAN NOT NULL,
-    isVVIP BOOLEAN NOT NULL,
-    owner_id VARCHAR(50)
-);
+-- CREATE TABLE seats(
+--     id VARCHAR(4) PRIMARY KEY,
+--     isAvailable BOOLEAN NOT NULL,
+--     isVIP BOOLEAN NOT NULL,
+--     isVVIP BOOLEAN NOT NULL,
+--     owner_id VARCHAR(50)
+-- );
 
 -- TRUNCATE TABLE seats;
 INSERT INTO seats(id, isAvailable, isVIP, isVVIP, owner_id) VALUES
@@ -330,60 +330,60 @@ INSERT INTO seats(id, isAvailable, isVIP, isVVIP, owner_id) VALUES
 ('E103', true, false, false, NULL),
 ('E104', true, false, false, NULL),
 
-('V1', true, false, true, NULL),
-('V2', true, false, true, NULL),
-('V3', true, false, true, NULL),
-('V4', true, false, true, NULL),
-('V5', true, false, true, NULL),
-('V6', true, false, true, NULL),
-('V7', true, false, true, NULL),
-('V8', true, false, true, NULL),
-('V9', true, false, true, NULL),
-('V10', true, false, true, NULL),
-('V11', true, false, true, NULL),
-('V12', true, false, true, NULL),
-('V13', true, false, true, NULL),
-('V14', true, false, true, NULL),
-('V15', true, false, true, NULL),
-('V16', true, false, true, NULL),
-('V17', true, false, true, NULL),
-('V18', true, false, true, NULL),
-('V19', true, false, true, NULL),
-('V20', true, false, true, NULL),
-('V21', true, false, true, NULL),
-('V22', true, false, true, NULL),
-('V23', true, false, true, NULL),
-('V24', true, false, true, NULL),
-('V25', true, false, true, NULL),
-('V26', true, false, true, NULL),
-('V27', true, false, true, NULL),
-('V28', true, false, true, NULL),
-('V29', true, false, true, NULL),
-('V30', true, false, true, NULL),
-('V31', true, false, true, NULL),
-('V32', true, false, true, NULL),
-('V33', true, false, true, NULL),
-('V34', true, false, true, NULL),
-('V35', true, false, true, NULL),
-('V36', true, false, true, NULL),
-('V37', true, false, true, NULL),
-('V38', true, false, true, NULL),
-('V39', true, false, true, NULL),
-('V40', true, false, true, NULL),
-('V41', true, false, true, NULL),
-('V42', true, false, true, NULL),
-('V43', true, false, true, NULL),
-('V44', true, false, true, NULL),
-('V45', true, false, true, NULL),
-('V46', true, false, true, NULL),
-('V47', true, false, true, NULL),
-('V48', true, false, true, NULL),
-('V49', true, false, true, NULL),
-('V50', true, false, true, NULL),
-('V51', true, false, true, NULL),
-('V52', true, false, true, NULL),
-('V53', true, false, true, NULL),
-('V54', true, false, true, NULL),
+('V1', false, false, true, NULL),
+('V2', false, false, true, NULL),
+('V3', false, false, true, NULL),
+('V4', false, false, true, NULL),
+('V5', false, false, true, NULL),
+('V6', false, false, true, NULL),
+('V7', false, false, true, NULL),
+('V8', false, false, true, NULL),
+('V9', false, false, true, NULL),
+('V10', false, false, true, NULL),
+('V11', false, false, true, NULL),
+('V12', false, false, true, NULL),
+('V13', false, false, true, NULL),
+('V14', false, false, true, NULL),
+('V15', false, false, true, NULL),
+('V16', false, false, true, NULL),
+('V17', false, false, true, NULL),
+('V18', false, false, true, NULL),
+('V19', false, false, true, NULL),
+('V20', false, false, true, NULL),
+('V21', false, false, true, NULL),
+('V22', false, false, true, NULL),
+('V23', false, false, true, NULL),
+('V24', false, false, true, NULL),
+('V25', false, false, true, NULL),
+('V26', false, false, true, NULL),
+('V27', false, false, true, NULL),
+('V28', false, false, true, NULL),
+('V29', false, false, true, NULL),
+('V30', false, false, true, NULL),
+('V31', false, false, true, NULL),
+('V32', false, false, true, NULL),
+('V33', false, false, true, NULL),
+('V34', false, false, true, NULL),
+('V35', false, false, true, NULL),
+('V36', false, false, true, NULL),
+('V37', false, false, true, NULL),
+('V38', false, false, true, NULL),
+('V39', false, false, true, NULL),
+('V40', false, false, true, NULL),
+('V41', false, false, true, NULL),
+('V42', false, false, true, NULL),
+('V43', false, false, true, NULL),
+('V44', false, false, true, NULL),
+('V45', false, false, true, NULL),
+('V46', false, false, true, NULL),
+('V47', false, false, true, NULL),
+('V48', false, false, true, NULL),
+('V49', false, false, true, NULL),
+('V50', false, false, true, NULL),
+('V51', false, false, true, NULL),
+('V52', false, false, true, NULL),
+('V53', false, false, true, NULL),
+('V54', false, false, true, NULL),
 
 ('B1', true, false, false, NULL),
 ('B2', true, false, false, NULL),
@@ -395,17 +395,17 @@ INSERT INTO seats(id, isAvailable, isVIP, isVVIP, owner_id) VALUES
 ('B8', true, false, false, NULL),
 ('B9', true, false, false, NULL),
 ('B10', true, false, false, NULL),
-('B11', true, false, true, NULL),
-('B12', true, false, true, NULL),
-('B13', true, false, true, NULL),
-('B14', true, false, true, NULL),
-('B15', true, false, true, NULL),
-('B16', true, false, true, NULL),
-('B17', true, false, true, NULL),
-('B18', true, false, true, NULL),
-('B19', true, false, true, NULL),
-('B20', true, false, true, NULL),
-('B21', true, false, false, NULL),
+('B11', false, false, true, NULL),
+('B12', false, false, true, NULL),
+('B13', false, false, true, NULL),
+('B14', false, false, true, NULL),
+('B15', false, false, true, NULL),
+('B16', false, false, true, NULL),
+('B17', false, false, true, NULL),
+('B18', false, false, true, NULL),
+('B19', false, false, true, NULL),
+('B20', false, false, true, NULL),
+('B21', false, false, false, NULL),
 ('B22', true, false, false, NULL),
 ('B23', true, false, false, NULL),
 ('B24', true, false, false, NULL),
@@ -415,16 +415,16 @@ INSERT INTO seats(id, isAvailable, isVIP, isVVIP, owner_id) VALUES
 ('B28', true, false, false, NULL),
 ('B29', true, false, false, NULL),
 ('B30', true, false, false, NULL),
-('B31', true, false, true, NULL),
-('B32', true, false, true, NULL),
-('B33', true, false, true, NULL),
-('B34', true, false, true, NULL),
-('B35', true, false, true, NULL),
-('B36', true, false, true, NULL),
-('B37', true, false, true, NULL),
-('B38', true, false, true, NULL),
-('B39', true, false, true, NULL),
-('B40', true, false, true, NULL),
+('B31', false, false, true, NULL),
+('B32', false, false, true, NULL),
+('B33', false, false, true, NULL),
+('B34', false, false, true, NULL),
+('B35', false, false, true, NULL),
+('B36', false, false, true, NULL),
+('B37', false, false, true, NULL),
+('B38', false, false, true, NULL),
+('B39', false, false, true, NULL),
+('B40', false, false, true, NULL),
 ('B41', true, false, false, NULL),
 ('B42', true, false, false, NULL),
 ('B43', true, false, false, NULL),
@@ -486,16 +486,16 @@ INSERT INTO seats(id, isAvailable, isVIP, isVVIP, owner_id) VALUES
 ('B99', true, false, false, NULL),
 ('B100', true, false, false, NULL),
 
-('D1', true, false, true, NULL),
-('D2', true, false, true, NULL),
-('D3', true, false, true, NULL),
-('D4', true, false, true, NULL),
-('D5', true, false, true, NULL),
-('D6', true, false, true, NULL),
-('D7', true, false, true, NULL),
-('D8', true, false, true, NULL),
-('D9', true, false, true, NULL),
-('D10', true, false, true, NULL),
+('D1', false, false, true, NULL),
+('D2', false, false, true, NULL),
+('D3', false, false, true, NULL),
+('D4', false, false, true, NULL),
+('D5', false, false, true, NULL),
+('D6', false, false, true, NULL),
+('D7', false, false, true, NULL),
+('D8', false, false, true, NULL),
+('D9', false, false, true, NULL),
+('D10', false, false, true, NULL),
 ('D11', true, false, false, NULL),
 ('D12', true, false, false, NULL),
 ('D13', true, false, false, NULL),
@@ -506,16 +506,16 @@ INSERT INTO seats(id, isAvailable, isVIP, isVVIP, owner_id) VALUES
 ('D18', true, false, false, NULL),
 ('D19', true, false, false, NULL),
 ('D20', true, false, false, NULL),
-('D21', true, false, true, NULL),
-('D22', true, false, true, NULL),
-('D23', true, false, true, NULL),
-('D24', true, false, true, NULL),
-('D25', true, false, true, NULL),
-('D26', true, false, true, NULL),
-('D27', true, false, true, NULL),
-('D28', true, false, true, NULL),
-('D29', true, false, true, NULL),
-('D30', true, false, true, NULL),
+('D21', false, false, true, NULL),
+('D22', false, false, true, NULL),
+('D23', false, false, true, NULL),
+('D24', false, false, true, NULL),
+('D25', false, false, true, NULL),
+('D26', false, false, true, NULL),
+('D27', false, false, true, NULL),
+('D28', false, false, true, NULL),
+('D29', false, false, true, NULL),
+('D30', false, false, true, NULL),
 ('D31', true, false, false, NULL),
 ('D32', true, false, false, NULL),
 ('D33', true, false, false, NULL),
@@ -587,66 +587,72 @@ INSERT INTO seats(id, isAvailable, isVIP, isVVIP, owner_id) VALUES
 ('D99', true, false, false, NULL),
 ('D100', true, false, false, NULL)
 
-DELETE FROM seats WHERE id = 'A1';
-DELETE FROM seats WHERE id = 'A2';
-DELETE FROM seats WHERE id = 'A3';
-DELETE FROM seats WHERE id = 'A4';
-DELETE FROM seats WHERE id = 'A6';
-DELETE FROM seats WHERE id = 'A7';
-DELETE FROM seats WHERE id = 'A8';
-DELETE FROM seats WHERE id = 'A9';
-DELETE FROM seats WHERE id = 'A10';
-DELETE FROM seats WHERE id = 'A11';
-DELETE FROM seats WHERE id = 'A12';
-DELETE FROM seats WHERE id = 'A13';
-DELETE FROM seats WHERE id = 'A19';
-DELETE FROM seats WHERE id = 'A20';
-DELETE FROM seats WHERE id = 'A22';
-DELETE FROM seats WHERE id = 'A23';
-DELETE FROM seats WHERE id = 'A24';
-DELETE FROM seats WHERE id = 'A25';
-DELETE FROM seats WHERE id = 'A26';
+-- DELETE FROM seats WHERE id = 'A1';
+-- DELETE FROM seats WHERE id = 'A2';
+-- DELETE FROM seats WHERE id = 'A3';
+-- DELETE FROM seats WHERE id = 'A4';
+-- DELETE FROM seats WHERE id = 'A6';
+-- DELETE FROM seats WHERE id = 'A7';
+-- DELETE FROM seats WHERE id = 'A8';
+-- DELETE FROM seats WHERE id = 'A9';
+-- DELETE FROM seats WHERE id = 'A10';
+-- DELETE FROM seats WHERE id = 'A11';
+-- DELETE FROM seats WHERE id = 'A12';
+-- DELETE FROM seats WHERE id = 'A13';
+-- DELETE FROM seats WHERE id = 'A19';
+-- DELETE FROM seats WHERE id = 'A20';
+-- DELETE FROM seats WHERE id = 'A22';
+-- DELETE FROM seats WHERE id = 'A23';
+-- DELETE FROM seats WHERE id = 'A24';
+-- DELETE FROM seats WHERE id = 'A25';
+-- DELETE FROM seats WHERE id = 'A26';
+-- DELETE FROM seats WHERE id = 'A27';
+-- DELETE FROM seats WHERE id = 'A28';
 
-DELETE FROM seats WHERE id = 'B51';
-DELETE FROM seats WHERE id = 'B52';
-DELETE FROM seats WHERE id = 'B53';
-DELETE FROM seats WHERE id = 'B54';
-DELETE FROM seats WHERE id = 'B55';
-DELETE FROM seats WHERE id = 'B56';
-DELETE FROM seats WHERE id = 'B57';
-DELETE FROM seats WHERE id = 'B58';
-DELETE FROM seats WHERE id = 'B59';
-DELETE FROM seats WHERE id = 'B60';
-DELETE FROM seats WHERE id = 'B71';
-DELETE FROM seats WHERE id = 'B72';
-DELETE FROM seats WHERE id = 'B76';
-DELETE FROM seats WHERE id = 'B77';
-DELETE FROM seats WHERE id = 'B78';
-DELETE FROM seats WHERE id = 'B79';
-DELETE FROM seats WHERE id = 'B80';
+-- DELETE FROM seats WHERE id = 'B51';
+-- DELETE FROM seats WHERE id = 'B52';
+-- DELETE FROM seats WHERE id = 'B53';
+-- DELETE FROM seats WHERE id = 'B54';
+-- DELETE FROM seats WHERE id = 'B55';
+-- DELETE FROM seats WHERE id = 'B56';
+-- DELETE FROM seats WHERE id = 'B57';
+-- DELETE FROM seats WHERE id = 'B58';
+-- DELETE FROM seats WHERE id = 'B59';
+-- DELETE FROM seats WHERE id = 'B60';
+-- DELETE FROM seats WHERE id = 'B71';
+-- DELETE FROM seats WHERE id = 'B72';
+-- DELETE FROM seats WHERE id = 'B76';
+-- DELETE FROM seats WHERE id = 'B77';
+-- DELETE FROM seats WHERE id = 'B78';
+-- DELETE FROM seats WHERE id = 'B79';
+-- DELETE FROM seats WHERE id = 'B80';
 
-DELETE FROM seats WHERE id = 'D41';
-DELETE FROM seats WHERE id = 'D42';
-DELETE FROM seats WHERE id = 'D43';
-DELETE FROM seats WHERE id = 'D44';
-DELETE FROM seats WHERE id = 'D45';
-DELETE FROM seats WHERE id = 'D46';
-DELETE FROM seats WHERE id = 'D47';
-DELETE FROM seats WHERE id = 'D48';
-DELETE FROM seats WHERE id = 'D49';
-DELETE FROM seats WHERE id = 'D50';
-DELETE FROM seats WHERE id = 'D61';
-DELETE FROM seats WHERE id = 'D62';
-DELETE FROM seats WHERE id = 'D63';
-DELETE FROM seats WHERE id = 'D64';
-DELETE FROM seats WHERE id = 'D65';
-DELETE FROM seats WHERE id = 'D66';
+-- DELETE FROM seats WHERE id = 'D41';
+-- DELETE FROM seats WHERE id = 'D42';
+-- DELETE FROM seats WHERE id = 'D43';
+-- DELETE FROM seats WHERE id = 'D44';
+-- DELETE FROM seats WHERE id = 'D45';
+-- DELETE FROM seats WHERE id = 'D46';
+-- DELETE FROM seats WHERE id = 'D47';
+-- DELETE FROM seats WHERE id = 'D48';
+-- DELETE FROM seats WHERE id = 'D49';
+-- DELETE FROM seats WHERE id = 'D50';
+-- DELETE FROM seats WHERE id = 'D61';
+-- DELETE FROM seats WHERE id = 'D62';
+-- DELETE FROM seats WHERE id = 'D63';
+-- DELETE FROM seats WHERE id = 'D64';
+-- DELETE FROM seats WHERE id = 'D65';
+-- DELETE FROM seats WHERE id = 'D66';
 
 -- DROP TABLE seats;
 
-CREATE TABLE users (
-    id VARCHAR(50) PRIMARY KEY,
-    owned_seat VARCHAR(3)
-);
+-- CREATE TABLE users (
+--     id VARCHAR(50) PRIMARY KEY,
+--     owned_seat VARCHAR(3)
+-- );
 
 -- TRUNCATE TABLE users;
+
+-- UPDATE seats
+-- SET isAvailable = TRUE
+-- WHERE id = 'C83';
