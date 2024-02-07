@@ -87,7 +87,7 @@ def post_seat_status(seat_id):
             seat.owner_id = data['owner_id']
             db.session.commit()
             return jsonify({'message': f'Seat {seat_id} updated successfully'}), 200
-        except OperationalError as e:
+        except OperationalError:
             raise
     else:
         return jsonify({'error': 'Seat not found'}), 404
