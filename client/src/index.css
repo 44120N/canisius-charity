@@ -133,10 +133,17 @@ body{
     padding: 1% 0;
 }
 
+.seats{
+    background-color: #ccccec;
+}
+
 .seat__info{
     display: flex;
     justify-content: flex-start;
     margin: 5px 0;
+    overflow-x: auto;
+    background-color: #ccccec;
+    padding: 1%;
 }
 
 .seat__info span{

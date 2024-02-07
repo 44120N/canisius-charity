@@ -1,9 +1,10 @@
 import { useSeat } from '../SeatContext';
 import SeatLayout from '../components/SeatRender';
 import SeatLogic from '../components/SeatLogic';
+import { useEffect } from 'react';
 
 const Home = () => {
-    const date = "01-02-2024";
+    const date = "23-02-2024";
     const time = "09:00";
     const { seat, cost } = useSeat();
 

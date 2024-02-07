@@ -8,23 +8,44 @@ import { useUser } from '../UserContext';
 
 const Navbar = () => {
   const { user, updateUser } = useUser();
-  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [isSidebarVisible, setIsSidebarVisible] = useState();
+  const [isSignIn, setIsSignIn] = useState(false);
 
   const handleCallbackResponse = useCallback(response => {
     var userObject = jwtDecode(response.credential);
     console.log(userObject);
     updateUser(userObject);
-    document.getElementById("signInSidebar").hidden = true;
-    document.getElementById("signInMain").hidden = true;
+    setIsSignIn(true);
   }, [updateUser]);
+
+  useEffect(() => {
+    const storedSignIn = localStorage.getItem('isSignIn');
+    if (storedSignIn) {
+      setIsSignIn(JSON.parse(storedSignIn));
+    }
+  }, []);
+  
+  useEffect(() => {
+    localStorage.setItem('isSignIn', JSON.stringify(isSignIn));
+  }, [isSignIn]);
+
+  useEffect(()=>{
+    if (isSignIn) {
+      document.getElementById("signInSidebar").hidden = true;
+      document.getElementById("signInMain").hidden = true;
+    } else {
+      document.getElementById("signInSidebar").hidden = false;
+      document.getElementById("signInMain").hidden = false;
+    }
+  }, [user]);
 
   function handleSignOut(event){
     updateUser({});
-    document.getElementById("signInSidebar").hidden = false;
-    document.getElementById("signInMain").hidden = false;
+    setIsSignIn(false);
   }
 
   useEffect(() => {
+    console.log(user);
     if (window.google && window.google.accounts) {
       google.accounts.id.initialize({
         client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,

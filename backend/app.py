@@ -4,6 +4,8 @@ from flask_cors import CORS
 from flask_marshmallow import Marshmallow
 from models import db, Seat, User
 import midtransclient
+from sqlalchemy.exc import OperationalError
+from retrying import retry
 
 dotenv.load_dotenv()
 
@@ -75,6 +77,7 @@ def get_seat_status(seat_id):
         return jsonify({'error': 'Seat not found'}), 404
 
 @app.route('/api/seat/<seat_id>/post', methods=['POST'])
+@retry(wait_fixed=1000)
 def post_seat_status(seat_id):
     seat = Seat.query.get(seat_id)
     if seat:
@@ -84,9 +87,8 @@ def post_seat_status(seat_id):
             seat.owner_id = data['owner_id']
             db.session.commit()
             return jsonify({'message': f'Seat {seat_id} updated successfully'}), 200
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({'error': str(e)}), 500
+        except OperationalError as e:
+            raise
     else:
         return jsonify({'error': 'Seat not found'}), 404
 

@@ -1020,6 +1020,9 @@ function SeatLayout() {
     };
     
     const getSeatColor = () => {
+      if (seat.includes(seatID)){
+        return BLUE;
+      }
       if (foundSeat) {
         return foundSeat.isVVIP ? YELLOW : isOrder ? BLUE : foundSeat.isAvailable ? foundSeat.isVIP ? GOLD : GREEN : RED;
       }
