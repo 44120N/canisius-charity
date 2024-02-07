@@ -77,7 +77,7 @@ def get_seat_status(seat_id):
         return jsonify({'error': 'Seat not found'}), 404
 
 @app.route('/api/seat/<seat_id>/post', methods=['POST'])
-@retry(wait_fixed=1000)
+@retry(wait_fixed=100)
 def post_seat_status(seat_id):
     seat = Seat.query.get(seat_id)
     if seat:
@@ -153,7 +153,22 @@ def get_all_seats():
 #                 return jsonify({'error': str(e)}), 500
 #         else:
 #             return jsonify({'error': 'User not found'}), 404
-       
+    
+@app.route('/api/transaction/<user_email>', methods=['POST'])
+def post_transaction(user_email):
+    data = request.get_json()
+    if data:
+        for i in data['transaction']:
+            seat = Seat.query.get(i)
+            if seat.isAvailable:
+                seat.isAvailable = False
+            if seat.owner_id == None:
+                seat.owner_id = user_email
+        db.session.commit()
+        return jsonify({'message': f'Seat updated successfully'}), 200
+    else:
+        return jsonify({'error': 'Transaction not found'}), 404
+
 @app.route('/api/tokenizer/<user_email>', methods=['GET', 'POST'])
 def post_token(user_email):
     if request.method == 'POST':

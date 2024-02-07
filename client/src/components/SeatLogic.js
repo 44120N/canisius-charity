@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const SeatLogic = () => {
   const { user } = useUser();
-  const { seat, updateSeat, cost, updateCost } = useSeat();
+  const { seat, cost, updateCost } = useSeat();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -22,6 +22,14 @@ const SeatLogic = () => {
           console.error('Error updating seat:', error);
         });
       });
+
+      // axios.post(`${process.env.REACT_APP_API_URL}/api/transaction/${user.email}`, {last_transaction: seat})
+      // .then(response => {
+      //   console.log(response.data);
+      // })
+      // .catch(error => {
+      //   console.error('Error updating seat:', error);
+      // });
       setIsSuccess(false);
     }
   }, [isSuccess]);

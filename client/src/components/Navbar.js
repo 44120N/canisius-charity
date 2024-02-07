@@ -9,20 +9,40 @@ import { useUser } from '../UserContext';
 const Navbar = () => {
   const { user, updateUser } = useUser();
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [isSignIn, setIsSignIn] = useState(false);
+
+  useEffect(() => {
+    const storeSignIn = localStorage.getItem('isSignIn');
+    if (storeSignIn) {
+      setIsSignIn(JSON.parse(storeSignIn));
+    }
+  }, []);
+  
+  useEffect(() => {
+    localStorage.setItem('isSignIn', JSON.stringify(isSignIn));
+  }, [isSignIn]);
 
   const handleCallbackResponse = useCallback(response => {
     var userObject = jwtDecode(response.credential);
     console.log(userObject);
     updateUser(userObject);
-    document.getElementById("signInSidebar").hidden = true;
-    document.getElementById("signInMain").hidden = true;
+    setIsSignIn(true);
   }, [updateUser]);
 
   function handleSignOut(event){
     updateUser({});
-    document.getElementById("signInSidebar").hidden = false;
-    document.getElementById("signInMain").hidden = false;
+    setIsSignIn(false);
   }
+
+  useEffect(()=>{
+    if (isSignIn) {
+      document.getElementById("signInSidebar").hidden = true;
+      document.getElementById("signInMain").hidden = true;
+    } else {
+      document.getElementById("signInSidebar").hidden = false;
+      document.getElementById("signInMain").hidden = false;
+    }
+  }, [isSignIn])
 
   useEffect(() => {
     if (window.google && window.google.accounts) {
