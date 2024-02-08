@@ -1057,7 +1057,7 @@ function SeatLayout() {
 
     const updateSeatStatus = async () => {
       try {
-        await axios.post(`${process.env.REACT_APP_API_URL}/api/seat/${seatID}/pending`, {orderStatus: !foundSeat.isOrder})
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/seat/${seatID}/is_order`, {orderStatus: !foundSeat.isOrder})
         if (!seat.includes(seatID)) {
           updateSeat([...seat, seatID]);
         } else {

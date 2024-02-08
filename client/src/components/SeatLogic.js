@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const SeatLogic = () => {
   const { user } = useUser();
-  const { seat, cost, updateCost } = useSeat();
+  const { seat, updateSeat, cost, updateCost } = useSeat();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   async function reserveSeats(seatIds, userEmail) {
@@ -13,6 +13,9 @@ const SeatLogic = () => {
         for (const seatId of seatIds) {
             await axios.post(`${process.env.REACT_APP_API_URL}/api/seat/${seatId}/post`, {
                 owner_id: userEmail
+            });
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/seat/${seatId}/is_order`, {
+              orderStatus: false
             });
         }
         console.log("Seats reserved successfully!");
@@ -26,6 +29,7 @@ const SeatLogic = () => {
   }, [user]);
 
   useEffect(() => {
+    
     console.log(seat);
   }, [seat]);
 
@@ -91,7 +95,8 @@ const SeatLogic = () => {
           if (requestData.token) {
             window.snap.pay(requestData.token, {
               onSuccess: function (result) {
-                reserveSeats(seat, user.email)
+                updateSeat([]);
+                reserveSeats(seat, user.email);
               },
               onPending: function (result) {
                 alert("waiting for your payment!");

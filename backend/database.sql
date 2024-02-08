@@ -1,11 +1,11 @@
--- CREATE TABLE seats(
---     id VARCHAR(4) PRIMARY KEY,
---     isAvailable BOOLEAN NOT NULL,
---     isVIP BOOLEAN NOT NULL,
---     isVVIP BOOLEAN NOT NULL,
---     owner_id VARCHAR(50),
---     isOrder BOOLEAN NOT NULL
--- );
+CREATE TABLE seats(
+    id VARCHAR(4) PRIMARY KEY,
+    isAvailable BOOLEAN NOT NULL,
+    isVIP BOOLEAN NOT NULL,
+    isVVIP BOOLEAN NOT NULL,
+    owner_id VARCHAR(50),
+    isOrder BOOLEAN NOT NULL
+);
 
 TRUNCATE TABLE seats;
 INSERT INTO seats(id, isAvailable, isVIP, isVVIP, owner_id, isOrder) VALUES
@@ -588,62 +588,62 @@ INSERT INTO seats(id, isAvailable, isVIP, isVVIP, owner_id, isOrder) VALUES
 ('D99', true, false, false, NULL, false),
 ('D100', true, false, false, NULL, false)
 
--- DELETE FROM seats WHERE id = 'A1';
--- DELETE FROM seats WHERE id = 'A2';
--- DELETE FROM seats WHERE id = 'A3';
--- DELETE FROM seats WHERE id = 'A4';
--- DELETE FROM seats WHERE id = 'A6';
--- DELETE FROM seats WHERE id = 'A7';
--- DELETE FROM seats WHERE id = 'A8';
--- DELETE FROM seats WHERE id = 'A9';
--- DELETE FROM seats WHERE id = 'A10';
--- DELETE FROM seats WHERE id = 'A11';
--- DELETE FROM seats WHERE id = 'A12';
--- DELETE FROM seats WHERE id = 'A13';
--- DELETE FROM seats WHERE id = 'A19';
--- DELETE FROM seats WHERE id = 'A20';
--- DELETE FROM seats WHERE id = 'A22';
--- DELETE FROM seats WHERE id = 'A23';
--- DELETE FROM seats WHERE id = 'A24';
--- DELETE FROM seats WHERE id = 'A25';
--- DELETE FROM seats WHERE id = 'A26';
--- DELETE FROM seats WHERE id = 'A27';
--- DELETE FROM seats WHERE id = 'A28';
+DELETE FROM seats WHERE id = 'A1';
+DELETE FROM seats WHERE id = 'A2';
+DELETE FROM seats WHERE id = 'A3';
+DELETE FROM seats WHERE id = 'A4';
+DELETE FROM seats WHERE id = 'A6';
+DELETE FROM seats WHERE id = 'A7';
+DELETE FROM seats WHERE id = 'A8';
+DELETE FROM seats WHERE id = 'A9';
+DELETE FROM seats WHERE id = 'A10';
+DELETE FROM seats WHERE id = 'A11';
+DELETE FROM seats WHERE id = 'A12';
+DELETE FROM seats WHERE id = 'A13';
+DELETE FROM seats WHERE id = 'A19';
+DELETE FROM seats WHERE id = 'A20';
+DELETE FROM seats WHERE id = 'A22';
+DELETE FROM seats WHERE id = 'A23';
+DELETE FROM seats WHERE id = 'A24';
+DELETE FROM seats WHERE id = 'A25';
+DELETE FROM seats WHERE id = 'A26';
+DELETE FROM seats WHERE id = 'A27';
+DELETE FROM seats WHERE id = 'A28';
 
--- DELETE FROM seats WHERE id = 'B51';
--- DELETE FROM seats WHERE id = 'B52';
--- DELETE FROM seats WHERE id = 'B53';
--- DELETE FROM seats WHERE id = 'B54';
--- DELETE FROM seats WHERE id = 'B55';
--- DELETE FROM seats WHERE id = 'B56';
--- DELETE FROM seats WHERE id = 'B57';
--- DELETE FROM seats WHERE id = 'B58';
--- DELETE FROM seats WHERE id = 'B59';
--- DELETE FROM seats WHERE id = 'B60';
--- DELETE FROM seats WHERE id = 'B71';
--- DELETE FROM seats WHERE id = 'B72';
--- DELETE FROM seats WHERE id = 'B76';
--- DELETE FROM seats WHERE id = 'B77';
--- DELETE FROM seats WHERE id = 'B78';
--- DELETE FROM seats WHERE id = 'B79';
--- DELETE FROM seats WHERE id = 'B80';
+DELETE FROM seats WHERE id = 'B51';
+DELETE FROM seats WHERE id = 'B52';
+DELETE FROM seats WHERE id = 'B53';
+DELETE FROM seats WHERE id = 'B54';
+DELETE FROM seats WHERE id = 'B55';
+DELETE FROM seats WHERE id = 'B56';
+DELETE FROM seats WHERE id = 'B57';
+DELETE FROM seats WHERE id = 'B58';
+DELETE FROM seats WHERE id = 'B59';
+DELETE FROM seats WHERE id = 'B60';
+DELETE FROM seats WHERE id = 'B71';
+DELETE FROM seats WHERE id = 'B72';
+DELETE FROM seats WHERE id = 'B76';
+DELETE FROM seats WHERE id = 'B77';
+DELETE FROM seats WHERE id = 'B78';
+DELETE FROM seats WHERE id = 'B79';
+DELETE FROM seats WHERE id = 'B80';
 
--- DELETE FROM seats WHERE id = 'D41';
--- DELETE FROM seats WHERE id = 'D42';
--- DELETE FROM seats WHERE id = 'D43';
--- DELETE FROM seats WHERE id = 'D44';
--- DELETE FROM seats WHERE id = 'D45';
--- DELETE FROM seats WHERE id = 'D46';
--- DELETE FROM seats WHERE id = 'D47';
--- DELETE FROM seats WHERE id = 'D48';
--- DELETE FROM seats WHERE id = 'D49';
--- DELETE FROM seats WHERE id = 'D50';
--- DELETE FROM seats WHERE id = 'D61';
--- DELETE FROM seats WHERE id = 'D62';
--- DELETE FROM seats WHERE id = 'D63';
--- DELETE FROM seats WHERE id = 'D64';
--- DELETE FROM seats WHERE id = 'D65';
--- DELETE FROM seats WHERE id = 'D66';
+DELETE FROM seats WHERE id = 'D41';
+DELETE FROM seats WHERE id = 'D42';
+DELETE FROM seats WHERE id = 'D43';
+DELETE FROM seats WHERE id = 'D44';
+DELETE FROM seats WHERE id = 'D45';
+DELETE FROM seats WHERE id = 'D46';
+DELETE FROM seats WHERE id = 'D47';
+DELETE FROM seats WHERE id = 'D48';
+DELETE FROM seats WHERE id = 'D49';
+DELETE FROM seats WHERE id = 'D50';
+DELETE FROM seats WHERE id = 'D61';
+DELETE FROM seats WHERE id = 'D62';
+DELETE FROM seats WHERE id = 'D63';
+DELETE FROM seats WHERE id = 'D64';
+DELETE FROM seats WHERE id = 'D65';
+DELETE FROM seats WHERE id = 'D66';
 
 -- DROP TABLE seats;
 

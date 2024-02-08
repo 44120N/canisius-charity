@@ -93,6 +93,22 @@ def post_seat_status(seat_id):
     else:
         return jsonify({'error': 'Seat not found'}), 404
 
+@app.route('/api/seat/<seat_id>/is_order', methods=['POST'])
+def post_seat_isOrder(seat_id):
+    seat = Seat.query.get(seat_id)
+    data = request.get_json
+    if seat:
+        data = request.get_json()
+        try:
+            seat.isOrder = data['orderStatus']
+            db.session.commit()
+            return jsonify({'message': f'Seat {seat_id} updated successfully'}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': f'{e}'}), 400
+    else:
+        return jsonify({'error': 'Seat not found'}), 404
+
 @app.route('/api/seat/<seat_id>/pending', methods=['POST'])
 def pending_seat_status(seat_id):
     seat = Seat.query.get(seat_id)

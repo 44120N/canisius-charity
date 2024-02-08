@@ -90,6 +90,7 @@ body{
     font-weight: var(--font-bold);
     color: var(--second-color);
     text-align: center;
+    margin: 3vh 0 0 0;
 }
 .about p{
     line-height: 1.5em;
@@ -402,4 +403,33 @@ button{
 
 .footer{
     background-color: var(--CC-blue);
+}
+
+.carousel .slide img {
+    max-height: 100vh;  /* change this to whatever you want */
+    width: auto;
+}
+
+
+hr{
+    border: 0.25vh solid var(--second-color);
+    margin: 0.75vh 0 0.75vh 0;
+}
+
+.hook{
+    background-color: var(--second-color);
+    border-radius: 16px;
+    margin: 5vh 10vw 2.5vh 10vw;
+    padding: 1vh 2vw 1vh 2vw;
+}
+
+.hook p{
+    display: flex;
+    justify-content: center;
+    color: var(--first-color);
+}
+
+.hook .lead{
+    font-size: var(--big-font-size);
+    color: var(--gold-color);
 }
