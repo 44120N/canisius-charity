@@ -40,6 +40,10 @@ const Home = () => {
                             <p>Sold</p>
                         </span>
                         <span>
+                            <i className="ri-square-fill" id='purple'></i>
+                            <p>Pending</p>
+                        </span>
+                        <span>
                             <i className="ri-square-fill" id='black'></i>
                             <p>Reserved</p>
                         </span>

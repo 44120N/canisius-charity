@@ -121,6 +121,9 @@ body{
 .about i#black{
     color: #000;
 }
+.about i#purple{
+    color: var(--purple-color);
+}
 
 .lineh{
     width: auto;
