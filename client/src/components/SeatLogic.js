@@ -7,32 +7,27 @@ const SeatLogic = () => {
   const { user } = useUser();
   const { seat, cost, updateCost } = useSeat();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
 
-  useEffect(()=>{
-    if (isSuccess) {
-      seat.forEach(seatID => {
-        axios.post(`${process.env.REACT_APP_API_URL}/api/seat/${seatID}/post`, {
-          owner_id: user.email
-        })
-        .then(response => {
-          console.log(response.data);
-        })
-        .catch(error => {
-          console.error('Error updating seat:', error);
-        });
-      });
-
-      // axios.post(`${process.env.REACT_APP_API_URL}/api/transaction/${user.email}`, {last_transaction: seat})
-      // .then(response => {
-      //   console.log(response.data);
-      // })
-      // .catch(error => {
-      //   console.error('Error updating seat:', error);
-      // });
-      setIsSuccess(false);
+  async function reserveSeats(seatIds, userEmail) {
+    try {
+        for (const seatId of seatIds) {
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/seat/${seatId}/post`, {
+                owner_id: userEmail
+            });
+        }
+        console.log("Seats reserved successfully!");
+    } catch (error) {
+        console.error(`Error reserving seats: ${error.message}`);
     }
-  }, [isSuccess]);
+  }
+
+  useEffect(() => {
+    console.log(user.email);
+  }, [user]);
+
+  useEffect(() => {
+    console.log(seat);
+  }, [seat]);
 
   useEffect(() => {
       setIsLoggedIn(!!user.email);
@@ -96,34 +91,7 @@ const SeatLogic = () => {
           if (requestData.token) {
             window.snap.pay(requestData.token, {
               onSuccess: function (result) {
-                setIsSuccess(true);
-                // alert("payment success!");
-                // console.log(result);
-
-                // axios.get(`${process.env.REACT_APP_API_URL}/api/users/${user.email}`)
-                // .then(response => {
-                //   const data = response.data;
-                //   console.log(data);
-                //   if (data != null) {
-                //     const user_data = {
-                //       id: user.email,
-                //       owned_seat: [...data.owned_seat, seat]
-                //     };
-                //     console.log(user_data);
-                //     return axios.put(`${process.env.REACT_APP_API_URL}/api/users/${user.email}`, user_data);
-                //   } else {
-                //     const user_data = {
-                //       id: user.email,
-                //       owned_seat: [seat]
-                //     };
-                //     console.log(user_data);
-                //     return axios.post(`${process.env.REACT_APP_API_URL}/api/users/${user.email}`, user_data);
-                //   }
-                // })
-                // .then(response => {
-                //   console.log('User seats updated successfully:', response.data);
-                // })
-                // .catch(error => console.error('Error updating user seats:', error));
+                reserveSeats(seat, user.email)
               },
               onPending: function (result) {
                 alert("waiting for your payment!");

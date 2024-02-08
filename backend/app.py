@@ -2,10 +2,11 @@ import os, requests, dotenv, random, datetime
 from flask import Flask, jsonify, session, redirect, url_for, request
 from flask_cors import CORS
 from flask_marshmallow import Marshmallow
-from models import db, Seat, User
+from models import db, Seat
 import midtransclient
 from sqlalchemy.exc import OperationalError
 from retrying import retry
+
 
 dotenv.load_dotenv()
 
@@ -27,13 +28,13 @@ ma = Marshmallow(app)
 
 class SeatSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'isAvailable', 'isVIP', 'isVVIP', 'owner_id')
+        fields = ('id', 'isAvailable', 'isVIP', 'isVVIP', 'owner_id', 'isOrder')
 seatSchema = SeatSchema(many=True)
 
-class UserSchema(ma.Schema):
-    class Meta:
-        fields = ('id', 'owned_seat')
-userSchema = UserSchema(many=True)
+# class UserSchema(ma.Schema):
+#     class Meta:
+#         fields = ('id', 'owned_seat')
+# userSchema = UserSchema(many=True)
 
 snap = midtransclient.Snap(
     is_production=False,
@@ -72,12 +73,12 @@ transaction_token = transaction['token']
 def get_seat_status(seat_id):
     seat = Seat.query.get(seat_id)
     if seat:
-        return jsonify({'id': seat.id, 'isAvailable': seat.isAvailable, 'isVIP': seat.isVIP, 'isVVIP': seat.isVVIP, 'owner_id': seat.owner_id})
+        return jsonify({'id': seat.id, 'isAvailable': seat.isAvailable, 'isVIP': seat.isVIP, 'isVVIP': seat.isVVIP, 'owner_id': seat.owner_id, 'isOrder': seat.isOrder})
     else:
         return jsonify({'error': 'Seat not found'}), 404
 
 @app.route('/api/seat/<seat_id>/post', methods=['POST'])
-@retry(wait_fixed=100)
+@retry(wait_fixed=5000)
 def post_seat_status(seat_id):
     seat = Seat.query.get(seat_id)
     if seat:
@@ -92,80 +93,39 @@ def post_seat_status(seat_id):
     else:
         return jsonify({'error': 'Seat not found'}), 404
 
+@app.route('/api/seat/<seat_id>/pending', methods=['POST'])
+def pending_seat_status(seat_id):
+    seat = Seat.query.get(seat_id)
+    if seat:
+        data = request.get_json()
+        try:
+            seat.isOrder = data['orderStatus']
+            db.session.commit()
+            return jsonify({'message': f'Seat {seat_id} updated successfully'}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': f'{e}'}), 400
+    else:
+        return jsonify({'error': 'Seat not found'}), 404
 
 @app.route('/api/seats', methods=['GET'])
 def get_all_seats():
     seats = Seat.query.all()
     result = seatSchema.dump(seats)
     return jsonify(result)
-
-# @app.route('/api/users', methods=['GET', 'POST'])
-# def get_all_users():
-#     if request.method == 'GET':
-#         users = User.query.all()
-#         result = userSchema.dump(users)
-#         return jsonify(result)
-#     elif request.method == 'POST':
-#        data = request.get_json()
-#        id = data.get('id')
-#        owned_seat = data.get('owned_seat')
-#        new_user = User(id=id, owned_seat=owned_seat)
-#        try:
-#            db.session.add(new_user)
-#            db.session.commit()
-#            return jsonify({'message': 'User added successfully'})
-#        except Exception as e:
-#            db.session.rollback()
-#            return jsonify({'error': str(e)}), 500
-
-# @app.route('/api/users/<user_email>', methods=['GET', 'POST', 'PUT'])
-# def handle_user(user_email):
-#     if request.method == 'GET':
-#         user = User.query.filter_by(id=user_email).first()
-#         if user:
-#             result = userSchema.dump(user)
-#             return jsonify(result)
-#         else:
-#             return jsonify()
-#     elif request.method == 'POST':
-#         data = request.get_json()
-#         id = data.get('id')
-#         owned_seat = data.get('owned_seat')
-#         new_user = User(id=id, owned_seat=owned_seat)
-#         try:
-#             db.session.add(new_user)
-#             db.session.commit()
-#             return jsonify({'message': 'User added successfully'})
-#         except Exception as e:
-#             db.session.rollback()
-#             return jsonify({'error': str(e)}), 500
-#     elif request.method == 'PUT':
-#         data = request.get_json()
-#         owned_seat = data.get('owned_seat')
-#         user = User.query.filter_by(id=user_email).first()
-#         if user:
-#             user.owned_seat = owned_seat
-#             try:
-#                 db.session.commit()
-#                 return jsonify({'message': 'User seats updated successfully'})
-#             except Exception as e:
-#                 db.session.rollback()
-#                 return jsonify({'error': str(e)}), 500
-#         else:
-#             return jsonify({'error': 'User not found'}), 404
     
 @app.route('/api/transaction/<user_email>', methods=['POST'])
 def post_transaction(user_email):
     data = request.get_json()
     if data:
-        for i in data['transaction']:
+        for i in data['last_transaction']:
             seat = Seat.query.get(i)
             if seat.isAvailable:
                 seat.isAvailable = False
             if seat.owner_id == None:
                 seat.owner_id = user_email
         db.session.commit()
-        return jsonify({'message': f'Seat updated successfully'}), 200
+        return jsonify({'message': 'Transaction safed successfully'}), 200
     else:
         return jsonify({'error': 'Transaction not found'}), 404
 

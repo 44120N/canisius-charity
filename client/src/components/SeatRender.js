@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSeat } from '../SeatContext';
+// import io from 'socket.io-client';
 // import seatLayout from "../assets/null.png"
+
+// const socket = io.connect(`${process.env.REACT_APP_API_URL}`); 
 
 const BLUE = "var(--blue-color)";
 const RED = "var(--red-color)";
 const GREEN = "var(--green-color)";
 const GOLD = "var(--gold-color)";
 const YELLOW = "var(--yellow-color)";
+const PURPLE = "var(--purple-color)";
 const seatCGap = "32px";
 const seatEGap = "175px";
 
@@ -15,12 +19,58 @@ function SeatLayout() {
   const [seats, setSeats] = useState([]);
   const { seat, updateSeat } = useSeat([]);
 
+  // useEffect(() => {
+  //   axios.get(`${process.env.REACT_APP_API_URL}/api/seats`)
+  //   .then(response => setSeats(response.data))
+  //   .catch(error => console.error('Error fetching seat data:', error));
+  // }, [seat]);
+
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/api/seats`)
-    .then(response => setSeats(response.data))
-    .catch(error => console.error('Error fetching seat data:', error));
-  }, [seat]);
-  
+    const fetchData = async () => {
+      try {
+        axios.get(`${process.env.REACT_APP_API_URL}/api/seats`)
+        .then(response => setSeats(response.data))
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    const intervalId = setInterval(fetchData, 1000); // Fetch data every 1 second
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // const handleSeatChange = (changedSeat) => {
+  //   // Update the UI with the changed seat
+  //   setSeats((prevSeats) =>
+  //     prevSeats.map((seat) =>
+  //       seat.id === changedSeat.id ? { ...seat, ...changedSeat } : seat
+  //     )
+  //   );
+  // };
+
+  // useEffect(() => {
+  //   // Fetch initial seat data
+  //   fetchSeatData();
+
+  //   // Listen for seat change events from the server
+  //   socket.on('seat_change', handleSeatChange);
+
+  //   return () => {
+  //     socket.off('seat_change', handleSeatChange);
+  //   };
+  // }, []);
+
+  // const fetchSeatData = async () => {
+  //   try {
+  //     const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/seats`);
+  //     setSeats(response.data);
+  //   } catch (error) {
+  //     console.error('Error fetching seat data:', error);
+  //   }
+  // };
+
   const renderSeatButtons = () => {
     return (<>
     {/* <img className="imageLayout" src={seatLayout}/> */}
@@ -994,20 +1044,20 @@ function SeatLayout() {
   
   const SeatButton = (seatID) =>{
     const foundSeat = seats.find(seat => seat.id === seatID);
-    const [isOrder, setIsOrder] = useState(false);
-
+    
     const handleClick = () =>{
-      if (foundSeat && foundSeat.isAvailable) {
+      if (!seat.includes(seatID) && foundSeat && foundSeat.isOrder) {
+        window.alert("Seat is on pending now");
+      } else if (foundSeat && foundSeat.isAvailable) {
         updateSeatStatus();
-      }
-      else{
+      } else{
         window.alert("Seat is not available now");
       }
     }
 
     const updateSeatStatus = async () => {
       try {
-        setIsOrder(!isOrder);
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/seat/${seatID}/pending`, {orderStatus: !foundSeat.isOrder})
         if (!seat.includes(seatID)) {
           updateSeat([...seat, seatID]);
         } else {
@@ -1020,13 +1070,15 @@ function SeatLayout() {
     };
     
     const getSeatColor = () => {
-      // if (seat.includes(seatID)){
-      //   return BLUE;
-      // }
-      if (foundSeat) {
-        return foundSeat.isVVIP ? YELLOW : isOrder ? BLUE : foundSeat.isAvailable ? foundSeat.isVIP ? GOLD : GREEN : RED;
+      if (seat.includes(seatID)){
+        return BLUE;
+      } else if (!seat.includes(seatID) && foundSeat && foundSeat.isOrder){
+        return PURPLE;
+      } else if (foundSeat) {
+        return foundSeat.isVVIP ? YELLOW : foundSeat.isAvailable ? foundSeat.isVIP ? GOLD : GREEN : RED;
+      } else {
+        return "#000";
       }
-      return "#000";
     };
     return <button id={seatID} style={{ backgroundColor: getSeatColor() }} onClick={ handleClick }>{seatID}</button>    
   }
