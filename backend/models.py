@@ -1,3 +1,4 @@
+from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -10,7 +11,7 @@ db = SQLAlchemy()
 #     def __init__(self, id):
 #         self.id = id
 
-class Seat(db.Model):
+class Seat(db.Model, UserMixin):
     __tablename__ = "seats"
     id = db.Column(db.String(3), primary_key=True)
     isAvailable = db.Column(db.Boolean, nullable=False)

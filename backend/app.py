@@ -201,16 +201,32 @@ login_manager.init_app(app)
 
 admin = Admin(app, name='Admin Console', template_mode='bootstrap3')
 
-class User(UserMixin):
-    def __init__(self, username):
+class AdminUser(UserMixin):
+    def __init__(self, username, password):
         self.username = username
+        self.password = password
 
     def get_id(self):
         return self.username
+    
+    @property
+    def is_authenticated(self):
+        return True
+    
+    @property
+    def is_admin(self):
+        return True
+    
+    @property
+    def is_active(self):
+        return True
+    
+    @property
+    def is_anonymous(self):
+        return False
 
-@login_manager.user_loader
-def load_user(username):
-    return User(username)
+    def __repr__(self):
+        return f"<AdminUser {self.username}>"
 
 ADMIN_USERNAME = os.getenv('ADMIN_USERNAME_MAIN')
 ADMIN_PASSWORD_HASH = generate_password_hash(os.getenv('ADMIN_PASSWORD_MAIN'))
@@ -218,11 +234,10 @@ ADMIN_PASSWORD_HASH = generate_password_hash(os.getenv('ADMIN_PASSWORD_MAIN'))
 @app.route('/admin')
 @login_required
 def admin_panel():
-    if not current_user.is_authenticated:
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.is_admin
+    def inaccessible_callback(self, name, **kwargs):
         return redirect(url_for('login'))
-    else:
-        seats = Seat.query.all()
-        return render_template('admin/index.html', seats=seats)
 
 @app.route('/admin/login', methods=['GET', 'POST'])
 def login():
@@ -230,7 +245,7 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
         if username == ADMIN_USERNAME and check_password_hash(ADMIN_PASSWORD_HASH, password):
-            user = User(username)
+            user = AdminUser(username, password)
             login_user(user)
             return redirect(url_for('admin.index'))
         else:
@@ -243,14 +258,22 @@ def admin_logout():
     logout_user()
     return redirect(url_for('login'))
 
-class MyAdminIndexView(AdminIndexView):
+class AdminHomeView(AdminIndexView):
     @expose('/')
-    @login_required
     def index(self):
-        return "Admin Panel"
+        if not current_user.is_authenticated or not current_user.is_admin:
+            return redirect(url_for('login'))
+        return super(AdminHomeView, self).index()
 
 class SeatModelView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.is_admin
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('login'))
+    
+    column_list = ['id', 'isAvailable', 'isVIP', 'isVVIP', 'owner_id', 'isOrder']
     column_searchable_list = ['id', 'owner_id']
+    column_sortable_list = ['id']
     column_filters = [
         FilterEqual(column=Seat.isAvailable, name='Available'),
         FilterEqual(column=Seat.isVIP, name='VIP'),
@@ -281,7 +304,7 @@ class SeatModelView(ModelView):
             flash('Seat updated successfully', 'success')
             return redirect(url_for('admin_panel'))
 
-        return self.render('admin/seat_edit.html', form=form, seat=seat)
+        return self.render('admin/seat_edit.html', form=form, seats=seat)
 
 class SeatEditForm(FlaskForm):
     isAvailable = BooleanField('Available')
