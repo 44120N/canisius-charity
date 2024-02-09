@@ -1,17 +1,27 @@
 import os, requests, dotenv, random, datetime
-from flask import Flask, jsonify, session, redirect, url_for, request
+from flask import Flask, flash, jsonify, render_template, session, redirect, url_for, request
 from flask_cors import CORS
 from flask_marshmallow import Marshmallow
 from models import db, Seat
 import midtransclient
 from sqlalchemy.exc import OperationalError
-from retrying import retry
 
+from flask_admin import Admin, BaseView, AdminIndexView
+from flask_admin.contrib.sqla import ModelView
+from flask_admin.base import AdminIndexView, expose
+from flask_admin.contrib.sqla.filters import FilterEqual
+from flask_admin.form import DateTimePickerWidget
+from flask_admin.contrib.sqla import ModelView
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_wtf import FlaskForm
+from wtforms import BooleanField, StringField
+from wtforms.validators import InputRequired
+from werkzeug.security import generate_password_hash, check_password_hash
 
 dotenv.load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
@@ -78,7 +88,6 @@ def get_seat_status(seat_id):
         return jsonify({'error': 'Seat not found'}), 404
 
 @app.route('/api/seat/<seat_id>/post', methods=['POST'])
-@retry(wait_fixed=5000)
 def post_seat_status(seat_id):
     seat = Seat.query.get(seat_id)
     if seat:
@@ -186,6 +195,102 @@ def after_request(response):
     if response.status_code >= 400:
         app.logger.error(f"Error in request: {response.status_code} - {response.data}")
     return response
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+admin = Admin(app, name='Admin Console', template_mode='bootstrap3')
+
+class User(UserMixin):
+    def __init__(self, username):
+        self.username = username
+
+    def get_id(self):
+        return self.username
+
+@login_manager.user_loader
+def load_user(username):
+    return User(username)
+
+ADMIN_USERNAME = os.getenv('ADMIN_USERNAME_MAIN')
+ADMIN_PASSWORD_HASH = generate_password_hash(os.getenv('ADMIN_PASSWORD_MAIN'))
+
+@app.route('/admin')
+@login_required
+def admin_panel():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    else:
+        seats = Seat.query.all()
+        return render_template('admin/index.html', seats=seats)
+
+@app.route('/admin/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        if username == ADMIN_USERNAME and check_password_hash(ADMIN_PASSWORD_HASH, password):
+            user = User(username)
+            login_user(user)
+            return redirect(url_for('admin.index'))
+        else:
+            flash('Invalid username or password', 'error')
+    return render_template('admin/login.html')
+
+@app.route('/admin/logout')
+@login_required
+def admin_logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+class MyAdminIndexView(AdminIndexView):
+    @expose('/')
+    @login_required
+    def index(self):
+        return "Admin Panel"
+
+class SeatModelView(ModelView):
+    column_searchable_list = ['id', 'owner_id']
+    column_filters = [
+        FilterEqual(column=Seat.isAvailable, name='Available'),
+        FilterEqual(column=Seat.isVIP, name='VIP'),
+        FilterEqual(column=Seat.isVVIP, name='VVIP'),
+        FilterEqual(column=Seat.owner_id, name='Owner ID'),
+        FilterEqual(column=Seat.isOrder, name='Order')
+    ]
+    form_widget_args = {
+        'created_at': {
+            'widget': DateTimePickerWidget()
+        }
+    }
+    
+    @login_required
+    @expose('/edit/<id>', methods=['GET', 'POST'])
+    def edit_view(self, id):
+        seat = Seat.query.get(id)
+
+        if seat is None:
+            flash('Seat not found', 'error')
+            return redirect(url_for('admin_panel'))
+
+        form = SeatEditForm(obj=seat)
+
+        if request.method == 'POST' and form.validate_on_submit():
+            form.populate_obj(seat)
+            db.session.commit()
+            flash('Seat updated successfully', 'success')
+            return redirect(url_for('admin_panel'))
+
+        return self.render('admin/seat_edit.html', form=form, seat=seat)
+
+class SeatEditForm(FlaskForm):
+    isAvailable = BooleanField('Available')
+    isVIP = BooleanField('VIP')
+    isVVIP = BooleanField('VVIP')
+    owner_id = StringField('Owner ID')
+    isOrder = BooleanField('Order')
+
+admin.add_view(SeatModelView(Seat, db.session))
 
 if __name__ == "__main__":
     app.run(debug=True)

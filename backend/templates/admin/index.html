@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <!-- Add any necessary CSS stylesheets or libraries here -->
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    
+    <h2>Seats Information</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Seat ID</th>
+                <th>Availability</th>
+                <th>VIP Status</th>
+                <th>VVIP Status</th>
+                <th>Owner ID</th>
+                <th>Order Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for seat in seats %}
+            <tr>
+                <td>{{ seat.id }}</td>
+                <td>{{ 'Available' if seat.isAvailable else 'Not Available' }}</td>
+                <td>{{ 'VIP' if seat.isVIP else 'Not VIP' }}</td>
+                <td>{{ 'VVIP' if seat.isVVIP else 'Not VVIP' }}</td>
+                <td>{{ seat.owner_id if seat.owner_id else 'None' }}</td>
+                <td>{{ 'Ordered' if seat.isOrder else 'Not Ordered' }}</td>
+                <td><a href="{{ url_for('SeatModelView.edit_view', id=seat.id) }}">Edit</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
