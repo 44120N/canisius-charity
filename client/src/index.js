@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import About from "./pages/About";
 import Donate from "./pages/Donate";
+import Success from "./pages/Success"
 import { UserProvider } from './UserContext';
 import { SeatProvider } from './SeatContext';
 import Footer from "./components/Footer.js";
@@ -18,6 +19,7 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="about" element={<About/>} />
           <Route path="donate" element={<Donate/>} />
+          <Route path="success" element={<Success/>}/>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -199,12 +199,10 @@ def after_request(response):
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-admin = Admin(app, name='Admin Console', template_mode='bootstrap3')
 
 class AdminUser(UserMixin):
-    def __init__(self, username, password):
+    def __init__(self, username):
         self.username = username
-        self.password = password
 
     def get_id(self):
         return self.username
@@ -228,16 +226,19 @@ class AdminUser(UserMixin):
     def __repr__(self):
         return f"<AdminUser {self.username}>"
 
+@login_manager.user_loader
+def load_user(user_id):
+    return AdminUser(user_id)
+
 ADMIN_USERNAME = os.getenv('ADMIN_USERNAME_MAIN')
 ADMIN_PASSWORD_HASH = generate_password_hash(os.getenv('ADMIN_PASSWORD_MAIN'))
 
 @app.route('/admin')
 @login_required
 def admin_panel():
-    def is_accessible(self):
-        return current_user.is_authenticated and current_user.is_admin
-    def inaccessible_callback(self, name, **kwargs):
-        return redirect(url_for('login'))
+    seats = Seat.query.all()
+    print(seats)
+    return render_template('admin/index.html', seats=seats)
 
 @app.route('/admin/login', methods=['GET', 'POST'])
 def login():
@@ -245,7 +246,7 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
         if username == ADMIN_USERNAME and check_password_hash(ADMIN_PASSWORD_HASH, password):
-            user = AdminUser(username, password)
+            user = AdminUser(username)
             login_user(user)
             return redirect(url_for('admin.index'))
         else:
@@ -274,23 +275,15 @@ class SeatModelView(ModelView):
     column_list = ['id', 'isAvailable', 'isVIP', 'isVVIP', 'owner_id', 'isOrder']
     column_searchable_list = ['id', 'owner_id']
     column_sortable_list = ['id']
-    column_filters = [
-        FilterEqual(column=Seat.isAvailable, name='Available'),
-        FilterEqual(column=Seat.isVIP, name='VIP'),
-        FilterEqual(column=Seat.isVVIP, name='VVIP'),
-        FilterEqual(column=Seat.owner_id, name='Owner ID'),
-        FilterEqual(column=Seat.isOrder, name='Order')
-    ]
+    column_filters = ['isAvailable', 'isVIP', 'isVVIP', 'owner_id', 'isOrder']
     form_widget_args = {
         'created_at': {
             'widget': DateTimePickerWidget()
         }
     }
-    
-    @login_required
     @expose('/edit/<id>', methods=['GET', 'POST'])
     def edit_view(self, id):
-        seat = Seat.query.get(id)
+        seat = Seat.query.get_or_404(id)
 
         if seat is None:
             flash('Seat not found', 'error')
@@ -313,6 +306,7 @@ class SeatEditForm(FlaskForm):
     owner_id = StringField('Owner ID')
     isOrder = BooleanField('Order')
 
+admin = Admin(app, name='Admin Console', template_mode='bootstrap3', index_view=AdminHomeView())
 admin.add_view(SeatModelView(Seat, db.session))
 
 if __name__ == "__main__":

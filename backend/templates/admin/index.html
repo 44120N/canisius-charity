@@ -19,6 +19,7 @@
                 <th>VVIP Status</th>
                 <th>Owner ID</th>
                 <th>Order Status</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -30,7 +31,7 @@
                 <td>{{ 'VVIP' if seat.isVVIP else 'Not VVIP' }}</td>
                 <td>{{ seat.owner_id if seat.owner_id else 'None' }}</td>
                 <td>{{ 'Ordered' if seat.isOrder else 'Not Ordered' }}</td>
-                <td><a href="{{ url_for('SeatModelView.edit_view', id=seat.id) }}">Edit</a></td>
+                <td><a href="{{ url_for('seat.edit_view', id=seat.id) }}">Edit</a></td>
             </tr>
             {% endfor %}
         </tbody>

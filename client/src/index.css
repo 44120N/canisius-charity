@@ -433,3 +433,12 @@ hr{
     font-size: var(--big-font-size);
     color: var(--gold-color);
 }
+
+.content.success{
+    background-color: var(--green-color);
+    padding: 10vh 5vw 10vh 5vw;
+}
+
+.content.success button{
+    
+}
