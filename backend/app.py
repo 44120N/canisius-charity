@@ -205,7 +205,7 @@ class AdminUser(UserMixin):
         return self.username
     
     def is_authenticated(self):
-        return False
+        return True
     
     def is_admin(self):
         return False
