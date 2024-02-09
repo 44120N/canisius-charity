@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSeat } from '../SeatContext';
+import { useUser } from '../UserContext';
 // import io from 'socket.io-client';
 // import seatLayout from "../assets/null.png"
 
@@ -17,7 +18,13 @@ const seatEGap = "175px";
 
 function SeatLayout() {
   const [seats, setSeats] = useState([]);
-  const { seat, updateSeat } = useSeat([]);
+  const { seat, updateSeat } = useSeat();
+  const { user } = useUser();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(!!user.email);
+  }, [user]);
 
   // useEffect(() => {
   //   axios.get(`${process.env.REACT_APP_API_URL}/api/seats`)
@@ -1046,12 +1053,16 @@ function SeatLayout() {
     const foundSeat = seats.find(seat => seat.id === seatID);
     
     const handleClick = () =>{
-      if (!seat.includes(seatID) && foundSeat && foundSeat.isOrder) {
-        window.alert("Seat is on pending now");
-      } else if (foundSeat && foundSeat.isAvailable) {
-        updateSeatStatus();
-      } else{
-        window.alert("Seat is not available now");
+      if (isLoggedIn){
+        if (!seat.includes(seatID) && foundSeat && foundSeat.isOrder) {
+          window.alert("Seat is on pending now");
+        } else if (foundSeat && foundSeat.isAvailable) {
+          updateSeatStatus();
+        } else{
+          window.alert("Seat is not available now");
+        }
+      } else {
+        window.alert("Sign in first");
       }
     }
 

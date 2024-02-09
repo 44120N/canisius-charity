@@ -29,7 +29,6 @@ const SeatLogic = () => {
   }, [user]);
 
   useEffect(() => {
-    
     console.log(seat);
   }, [seat]);
 

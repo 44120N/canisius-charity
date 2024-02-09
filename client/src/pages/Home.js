@@ -1,6 +1,7 @@
 import { useSeat } from '../SeatContext';
 import SeatLayout from '../components/SeatRender';
 import SeatLogic from '../components/SeatLogic';
+// import Popup from '../components/Popup';
 
 const Home = () => {
     const date = "23-02-2024";

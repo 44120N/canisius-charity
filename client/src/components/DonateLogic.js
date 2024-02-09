@@ -24,7 +24,7 @@ const DonateLogic = () => {
       if (donate !== 0) {
         const transaction_data = {
           id: 'donate', 
-          price: donate, 
+          price: donate,
           first_name: user.given_name, 
           last_name: user.family_name, 
           email: user.email

@@ -93,7 +93,7 @@ const About = () => {
 
   return (
     <div className="about">
-      <div className="content">
+      <div className="content about">
         <Carousel
           showArrows="{true}"
           autoPlay="{true}"

@@ -15,13 +15,14 @@ from flask_admin.contrib.sqla import ModelView
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
 from wtforms import BooleanField, StringField
-from wtforms.validators import InputRequired
 from werkzeug.security import generate_password_hash, check_password_hash
 
 dotenv.load_dotenv()
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
@@ -196,10 +197,6 @@ def after_request(response):
         app.logger.error(f"Error in request: {response.status_code} - {response.data}")
     return response
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-
 class AdminUser(UserMixin):
     def __init__(self, username):
         self.username = username
@@ -207,19 +204,15 @@ class AdminUser(UserMixin):
     def get_id(self):
         return self.username
     
-    @property
     def is_authenticated(self):
-        return True
+        return False
     
-    @property
     def is_admin(self):
-        return True
+        return False
     
-    @property
     def is_active(self):
         return True
     
-    @property
     def is_anonymous(self):
         return False
 
@@ -233,25 +226,20 @@ def load_user(user_id):
 ADMIN_USERNAME = os.getenv('ADMIN_USERNAME_MAIN')
 ADMIN_PASSWORD_HASH = generate_password_hash(os.getenv('ADMIN_PASSWORD_MAIN'))
 
-@app.route('/admin')
-@login_required
-def admin_panel():
-    seats = Seat.query.all()
-    print(seats)
-    return render_template('admin/index.html', seats=seats)
-
-@app.route('/admin/login', methods=['GET', 'POST'])
+@app.route('/admin/login/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
         if username == ADMIN_USERNAME and check_password_hash(ADMIN_PASSWORD_HASH, password):
             user = AdminUser(username)
+            user.is_authenticated = True
             login_user(user)
+            user.is_admin = True
             return redirect(url_for('admin.index'))
         else:
             flash('Invalid username or password', 'error')
-    return render_template('admin/login.html')
+    return render_template('login.html')
 
 @app.route('/admin/logout')
 @login_required
@@ -287,7 +275,7 @@ class SeatModelView(ModelView):
 
         if seat is None:
             flash('Seat not found', 'error')
-            return redirect(url_for('admin_panel'))
+            return redirect(url_for('admin.index'))
 
         form = SeatEditForm(obj=seat)
 
@@ -295,9 +283,9 @@ class SeatModelView(ModelView):
             form.populate_obj(seat)
             db.session.commit()
             flash('Seat updated successfully', 'success')
-            return redirect(url_for('admin_panel'))
+            return redirect(url_for('admin.index'))
 
-        return self.render('admin/seat_edit.html', form=form, seats=seat)
+        return self.render('seat_edit.html', form=form, seats=seat)
 
 class SeatEditForm(FlaskForm):
     isAvailable = BooleanField('Available')

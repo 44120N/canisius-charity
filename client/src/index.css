@@ -140,6 +140,7 @@ body{
 
 .seats{
     background-color: #ccccec;
+    border-radius: 8px;
 }
 
 .seat__info{
@@ -149,6 +150,7 @@ body{
     overflow-x: auto;
     background-color: #ccccec;
     padding: 1%;
+    border-radius: 8px;
 }
 
 .seat__info span{
@@ -434,11 +436,79 @@ hr{
     color: var(--gold-color);
 }
 
+.content.about{
+    padding: 2.5vh 2vw;
+}
+
 .content.success{
     background-color: var(--green-color);
     padding: 10vh 5vw 10vh 5vw;
 }
 
+.content.success span{
+    display: flex;
+    justify-content: space-between;
+}
+
+.content.success span strong{
+    font-size: var(--big-font-size);
+    color: #1bff76;
+}
+
 .content.success button{
-    
+    display: flex;
+    margin: 3vh 0 0 auto;
+    transition: all 0.25s ease-in-out;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--gold-color);
+    padding: 1vh 1vw;
+}
+
+.content.success button a{
+    color: var(--CC-blue);
+}
+.content.success button:hover{
+    background-color: var(--red-color);
+    color: var(--CC-blue);
+    transform: scale(1.075);
+}
+
+.content.success h3{
+    color: crimson; /* var(--red-color) is too bright. So I tuned it to crimson*/
+}
+
+
+.content.failure{
+    padding: 5vh 5vw 5vh 5vw;
+    background-color: rgba(255, 0, 0, 0.324);
+}
+
+.content.failure span{
+    display: flex;
+    justify-content: space-between;
+}
+
+.content.failure span strong{
+    font-size: var(--big-font-size);
+}
+
+.content.failure button{
+    display: flex;
+    margin: 3vh 0 0 auto;
+    transition: all 0.25s ease-in-out;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--gold-color);
+    padding: 1vh 1vw;
+}
+
+.content.failure button a{
+    color: var(--CC-blue);
+}
+
+.content.failure button:hover{
+    background-color: var(--red-color);
+    color: var(--CC-blue);
+    transform: scale(1.075);
 }
