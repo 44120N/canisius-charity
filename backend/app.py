@@ -5,8 +5,9 @@ from flask_marshmallow import Marshmallow
 from models import db, Seat
 import midtransclient
 from sqlalchemy.exc import OperationalError
+from retrying import retry
 
-from flask_admin import Admin, BaseView, AdminIndexView
+from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.base import AdminIndexView, expose
 from flask_admin.form import DateTimePickerWidget
@@ -51,32 +52,19 @@ snap = midtransclient.Snap(
     server_key=os.getenv('MIDTRANS_SERVER_KEY')
 )
 
-# parameter_price = 100
-# parameter_freq = 1
-
-# parameter = {
-#     "transaction_details": {
-#         "order_id": random.randint(1, 900),
-#         "gross_amount": parameter_price*parameter_freq
-#     },
-#     "credit_card": {
-#         "secure": True,
-#     },
-#     "item_details": {
-#         "name": "test",
-#         "price": parameter_price,
-#         "quantity": parameter_freq
-#     },
-#     "customer_details": {
-#         "first_name": "",
-#         "last_name": "",
-#         "email": "aaronhartono28@gmail.com",
-#     },
-# }
-
-# parameter["transaction_details"]["gross_amount"] = parameter["item_details"]["price"]*parameter["item_details"]["quantity"]
-# transaction = snap.create_transaction(parameter)
-# transaction_token = transaction['token']
+@app.before_request
+def set_is_order_false():
+    seats = Seat.query.filter_by(owner_id="").all()
+    for seat in seats:
+        seat.isOrder = False
+    db.session.commit()
+    
+@app.before_request
+def set_is_locked():
+    seats = Seat.query.filter(Seat.owner_id != "").all()
+    for seat in seats:
+        seat.isOrder = True
+    db.session.commit()
 
 @app.route('/api/seat/<seat_id>', methods=['GET'])
 def get_seat_status(seat_id):
@@ -87,6 +75,7 @@ def get_seat_status(seat_id):
         return jsonify({'error': 'Seat not found'}), 404
 
 @app.route('/api/seat/<seat_id>/post', methods=['POST'])
+@retry(wait_fixed=1000, stop_max_attempt_number=3)
 def post_seat_status(seat_id):
     seat = Seat.query.get(seat_id)
     if seat:
@@ -104,21 +93,6 @@ def post_seat_status(seat_id):
 def post_seat_isOrder(seat_id):
     seat = Seat.query.get(seat_id)
     data = request.get_json
-    if seat:
-        data = request.get_json()
-        try:
-            seat.isOrder = data['orderStatus']
-            db.session.commit()
-            return jsonify({'message': f'Seat {seat_id} updated successfully'}), 200
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({'error': f'{e}'}), 400
-    else:
-        return jsonify({'error': 'Seat not found'}), 404
-
-@app.route('/api/seat/<seat_id>/pending', methods=['POST'])
-def pending_seat_status(seat_id):
-    seat = Seat.query.get(seat_id)
     if seat:
         data = request.get_json()
         try:

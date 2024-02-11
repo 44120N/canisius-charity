@@ -15,14 +15,13 @@ import Footer from "./components/Footer.js";
 export default function App() {
   return (
     <BrowserRouter>
+      <Navbar/>
       <Routes>
-        <Route path="/" element={<Navbar />}>
-          <Route index element={<Home />} />
-          <Route path="about" element={<About/>} />
-          <Route path="donate" element={<Donate/>} />
-          <Route path="success*" element={<Success/>}/>
-          <Route path="failure*" element={<Failure/>}/>
-        </Route>
+        <Route path="/" element={<Home />} />
+        <Route path="about" element={<About/>} />
+        <Route path="donate" element={<Donate/>} />
+        <Route path="success*" element={<Success/>}/>
+        <Route path="failure*" element={<Failure/>}/>
       </Routes>
     </BrowserRouter>
   );
