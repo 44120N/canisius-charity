@@ -151,6 +151,7 @@ def post_token(user_email):
                 "last_name": data["last_name"],
                 "email": data["email"],
             },
+            "enabled_payments": ["gopay", "other_qris"]
         }
 
         parameter["transaction_details"]["gross_amount"] = parameter["item_details"][0]["price"] * \

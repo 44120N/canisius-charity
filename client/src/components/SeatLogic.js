@@ -16,6 +16,19 @@ const SeatLogic = () => {
     }
   }
 
+  async function set_owner(seatIds, ownerId) {
+    for (const seatId of seatIds) {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/seat/${seatId}/post`, {
+        owner_id: ownerId
+      });
+    }
+  }
+
+  async function reset(seatIds) {
+    orderStat(seatIds, false);
+    set_owner(seatIds, "");
+  }
+
   useEffect(() => {
     console.log(user.email);
   }, [user]);
@@ -96,13 +109,13 @@ const SeatLogic = () => {
               onError: function (result) {
                 alert("payment failed!");
                 updateSeat([]);
-                orderStat(seat, false);
+                reset(seat);
                 console.log(result);
               },
               onClose: function () {
                 alert('you closed the popup without finishing the payment');
                 updateSeat([]);
-                orderStat(seat, false);
+                reset(seat);
               }
             });
           }          
