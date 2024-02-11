@@ -9,7 +9,6 @@ from sqlalchemy.exc import OperationalError
 from flask_admin import Admin, BaseView, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.base import AdminIndexView, expose
-from flask_admin.contrib.sqla.filters import FilterEqual
 from flask_admin.form import DateTimePickerWidget
 from flask_admin.contrib.sqla import ModelView
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -48,9 +47,8 @@ seatSchema = SeatSchema(many=True)
 # userSchema = UserSchema(many=True)
 
 snap = midtransclient.Snap(
-    is_production=False,
-    server_key=os.getenv('MIDTRANS_SERVER_KEY'),
-    client_key=os.getenv('MIDTRANS_CLIENT_KEY')
+    is_production=True,
+    server_key=os.getenv('MIDTRANS_SERVER_KEY')
 )
 
 # parameter_price = 100
