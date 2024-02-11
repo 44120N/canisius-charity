@@ -18,7 +18,7 @@ import carousel_13 from "../assets/about/13.png";
 const About = () => {
   const imageData = [
     {
-        label: "Ruang Kelas",
+        label: "Image 1",
         alt: "image1",
         url: carousel_1
     },
@@ -92,8 +92,8 @@ const About = () => {
   ));
 
   return (
-    <div className="about">
-      <div className="content about">
+    <div className="about" id="about">
+      <div className="content" id="picture">
         <Carousel
           showArrows="{true}"
           autoPlay="{true}"
@@ -103,6 +103,8 @@ const About = () => {
         >
           {renderSlides}
         </Carousel>
+      </div>
+      <div className="content">
         <h1 className="title">Tentang Konser Amal Canisius</h1>
         <hr />
         <div className="hook">
@@ -121,11 +123,15 @@ const About = () => {
           yang diselenggarakan oleh Canisius College, Jakarta, bekerjasama dengan
           Universitas Musik Elisabeth dari Hiroshima.
         </p>
+      </div>
+      <div className="content">
         <h1 className="title">Detail Acara</h1>
         <hr />
         <p>Tanggal: Minggu, 25 Februari</p>
         <p>Waktu : 16.30 - 19.00 WIB</p>
         <p>Tempat : <em>Sportshall</em> Canisius College, Jakarta</p>
+      </div>
+      <div className="content">
         <h1 className="title">Misi dan Tujuan</h1>
         <hr />
         <p>
@@ -135,6 +141,8 @@ const About = () => {
           pertunjukan musik yang eksklusif, tetapi juga berkontribusi pada tujuan
           yang lebih besar.
         </p>
+      </div>
+      <div className="content">
         <h1 className="title">Para Penampil</h1>
         <hr/>
         <p>
@@ -143,6 +151,8 @@ const About = () => {
           berjanji akan memukau indra Anda dan membawa Anda ke dalam ranah melodi
           yang sublime.
         </p>
+      </div>
+      <div className="content">
         <h1 className="title">Kampanye Amal</h1>
         <hr />
         <p>
@@ -151,6 +161,8 @@ const About = () => {
           Ketapang. Kejujuran Anda akan secara langsung memengaruhi kehidupan para
           siswa dan pendidik, memupuk masa depan yang lebih cerah bagi komunitas.
         </p>
+      </div>
+      <div className="content">
         <h1 className="title">Bergabunglah dengan Kami</h1>
         <hr />
         <p>

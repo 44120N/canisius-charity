@@ -26,11 +26,16 @@ function SeatLayout() {
     setIsLoggedIn(!!user.email);
   }, [user]);
 
-  // useEffect(() => {
-  //   axios.get(`${process.env.REACT_APP_API_URL}/api/seats`)
-  //   .then(response => setSeats(response.data))
-  //   .catch(error => console.error('Error fetching seat data:', error));
-  // }, [seat]);
+  async function reserveSeats(seatId, userEmail) {
+    try {
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/seat/${seatId}/post`, {
+            owner_id: userEmail
+        });
+        console.log("Seats reserved successfully!");
+    } catch (error) {
+        console.error(`Error reserving seats: ${error.message}`);
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -1071,8 +1076,10 @@ function SeatLayout() {
         await axios.post(`${process.env.REACT_APP_API_URL}/api/seat/${seatID}/is_order`, {orderStatus: !foundSeat.isOrder})
         if (!seat.includes(seatID)) {
           updateSeat([...seat, seatID]);
+          reserveSeats(seatID, user.email);
         } else {
           updateSeat(seat.filter(seat => seat !== seatID));
+          reserveSeats(seatID, "");
         }
         console.log(`Seat ${seatID} order status updated successfully`);
       } catch (error) {
@@ -1091,7 +1098,17 @@ function SeatLayout() {
         return "#000";
       }
     };
-    return <button id={seatID} style={{ backgroundColor: getSeatColor() }} onClick={ handleClick }>{seatID}</button>    
+
+    //aaron, should i add this???
+    const getSeatCursor = () => {
+      if(isLoggedIn){
+        return 'pointer';
+      }else{
+        return 'not-allowed';
+      }
+    }
+
+    return <button id={seatID} style={{ backgroundColor: getSeatColor(), cursor: getSeatCursor()}} onClick={ handleClick }>{seatID}</button>    
   }
 
   return (

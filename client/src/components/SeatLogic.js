@@ -7,20 +7,12 @@ const SeatLogic = () => {
   const { user } = useUser();
   const { seat, updateSeat, cost, updateCost } = useSeat();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  async function reserveSeats(seatIds, userEmail) {
-    try {
-        for (const seatId of seatIds) {
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/seat/${seatId}/post`, {
-                owner_id: userEmail
-            });
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/seat/${seatId}/is_order`, {
-              orderStatus: false
-            });
-        }
-        console.log("Seats reserved successfully!");
-    } catch (error) {
-        console.error(`Error reserving seats: ${error.message}`);
+  
+  async function orderStat(seatIds, isOrder) {
+    for (const seatId of seatIds) {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/seat/${seatId}/is_order`, {
+        orderStatus: isOrder
+      });
     }
   }
 
@@ -78,7 +70,7 @@ const SeatLogic = () => {
     if (isLoggedIn) {
       if (cost !== 0) {
         const transaction_data = {
-          id: seat, 
+          id: seat.sort().join(", "), 
           price: cost, 
           first_name: user.given_name, 
           last_name: user.family_name, 
@@ -92,10 +84,10 @@ const SeatLogic = () => {
           console.log(requestData.redirect_url);
           console.log(seat);
           if (requestData.token) {
+            alert("You have 15 minutes to do the payment!")
             window.snap.pay(requestData.token, {
               onSuccess: function (result) {
                 updateSeat([]);
-                reserveSeats(seat, user.email);
               },
               onPending: function (result) {
                 alert("waiting for your payment!");
@@ -103,10 +95,14 @@ const SeatLogic = () => {
               },
               onError: function (result) {
                 alert("payment failed!");
+                updateSeat([]);
+                orderStat(seat, false);
                 console.log(result);
               },
               onClose: function () {
                 alert('you closed the popup without finishing the payment');
+                updateSeat([]);
+                orderStat(seat, false);
               }
             });
           }          

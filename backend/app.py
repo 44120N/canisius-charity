@@ -21,6 +21,7 @@ dotenv.load_dotenv()
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
+# CORS(app, origins='http://localhost:3000')
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -53,32 +54,32 @@ snap = midtransclient.Snap(
     client_key=os.getenv('SANDBOX_MIDTRANS_CLIENT_KEY')
 )
 
-parameter_price = 100
-parameter_freq = 1
+# parameter_price = 100
+# parameter_freq = 1
 
-parameter = {
-    "transaction_details": {
-        "order_id": "#ID " + str(timestamp),
-        "gross_amount": parameter_price*parameter_freq
-    },
-    "credit_card": {
-        "secure": True,
-    },
-    "item_details": {
-        "name": "test",
-        "price": parameter_price,
-        "quantity": parameter_freq
-    },
-    "customer_details": {
-        "first_name": "",
-        "last_name": "",
-        "email": "aaronhartono28@gmail.com",
-    },
-}
+# parameter = {
+#     "transaction_details": {
+#         "order_id": random.randint(1, 900),
+#         "gross_amount": parameter_price*parameter_freq
+#     },
+#     "credit_card": {
+#         "secure": True,
+#     },
+#     "item_details": {
+#         "name": "test",
+#         "price": parameter_price,
+#         "quantity": parameter_freq
+#     },
+#     "customer_details": {
+#         "first_name": "",
+#         "last_name": "",
+#         "email": "aaronhartono28@gmail.com",
+#     },
+# }
 
-parameter["transaction_details"]["gross_amount"] = parameter["item_details"]["price"]*parameter["item_details"]["quantity"]
-transaction = snap.create_transaction(parameter)
-transaction_token = transaction['token']
+# parameter["transaction_details"]["gross_amount"] = parameter["item_details"]["price"]*parameter["item_details"]["quantity"]
+# transaction = snap.create_transaction(parameter)
+# transaction_token = transaction['token']
 
 @app.route('/api/seat/<seat_id>', methods=['GET'])
 def get_seat_status(seat_id):
@@ -94,7 +95,6 @@ def post_seat_status(seat_id):
     if seat:
         data = request.get_json()
         try:
-            seat.isAvailable = False
             seat.owner_id = data['owner_id']
             db.session.commit()
             return jsonify({'message': f'Seat {seat_id} updated successfully'}), 200
@@ -164,7 +164,7 @@ def post_token(user_email):
 
         parameter = {
             "transaction_details": {
-                "order_id": (random.randint(1, 100) * 10) + random.randint(1, 100),
+                "order_id": random.randint(1, 900),
                 "gross_amount": parameter_price * parameter_freq
             },
             "credit_card": {
@@ -205,7 +205,7 @@ class AdminUser(UserMixin):
         return self.username
     
     def is_authenticated(self):
-        return True
+        return False
     
     def is_admin(self):
         return False

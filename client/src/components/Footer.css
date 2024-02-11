@@ -1,5 +1,5 @@
 .footer{
-    background-color: var(--third-color);
+    background-color: var(--fourth-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,7 +8,7 @@
     position: relative;
     width: 100%;
     min-height: 100px;
-    padding: 20px 50px;
+    padding: 5vh 5vw;
 }
 .footer .social-icon{
     position: relative;
@@ -24,7 +24,7 @@
 .footer .social-icon li a{
     font-size: 2em;
     color: var(--first-color);
-    margin: 0 10px;
+    margin: 0 1vw;
     display: inline-block;
     transition: 0.5s;
 }
@@ -33,13 +33,13 @@
     transform: translateY(-10px);
 }
 .footer img{
+    height: 10vh;
     max-height: 100px;
     width: auto;
 }
 .footer p{
     color: #fff;
     text-align: center;
-    margin-top: 15px;
-    margin-bottom: 10px;
-    font-size: 1.1em;
+    margin: 1.2vh 0;
+    font-size: .8em;
 }

@@ -1,16 +1,20 @@
-import "./Popup.css"
-import { useState } from "react";
+import React from 'react';
+import "./Popup.css";
 
-const Popup = () =>{
-    const [buttonPopup, setButtonPopup] = useState(true);
 
-    return (
+const Popup = (props) =>{
+    
+
+    return (props.trigger) ? (
     <>
-        <div className="content">
-            <img/>
+        <div className="popup">
+            <div className="popup-inner">
+                <button className="popup__btn--close" onClick={() => {props.setTrigger(false)}}>OK</button>
+                {props.children}
+            </div>
         </div>
     </>
-    );
+    ): "";
 }
 
 export default Popup;

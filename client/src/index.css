@@ -80,7 +80,7 @@ body{
   background: var(--first-color);
   width: 100%;
   position: relative;
-  padding: 1vh;
+  padding: 3vh;
   border-radius: 8px;
   margin: 2vh auto;
   z-index: 0;
@@ -90,7 +90,6 @@ body{
     font-weight: var(--font-bold);
     color: var(--second-color);
     text-align: center;
-    margin: 3vh 0 0 0;
 }
 .about p{
     line-height: 1.5em;
@@ -285,11 +284,11 @@ button{
 }
 
 #A{
-    margin-top: 36px;
+    margin-top: 44px;
 }
 
 #VVIP{
-    margin-top: 14px;
+    margin-top: 28px;
 }
 
 /* #E{
@@ -311,13 +310,13 @@ button{
 .table__side tbody tr td div button{
     margin: 1px;
     border: none;
-    padding: 0;
+    padding: 1%;
     width: 35px;
 }
 
 .table__mid tbody tr td div button{
     margin: 1px;
-    padding: 0;
+    padding: 1%;
     border: none;
     width: 35px;
 }
@@ -328,6 +327,10 @@ button{
 
 #table__mother{
     display: flex;
+}
+
+#table__mother button{
+    border-radius: 8px;
 }
 
 /* .table__right, .table__center, .table__left{
@@ -342,8 +345,6 @@ button{
     color: var(--first-color);
     font-size: 3vh;
 }
-
-
 
 .input-group {
     display: flex;
@@ -437,7 +438,7 @@ hr{
 }
 
 .content.about{
-    padding: 2.5vh 2vw;
+    padding: 3vh 1.5vw;
 }
 
 .content.success{
@@ -511,4 +512,14 @@ hr{
     background-color: var(--red-color);
     color: var(--CC-blue);
     transform: scale(1.075);
+}
+
+#about .content{
+    padding: 3vh;
+    margin: 5vh auto;
+    max-width: 70vw;
+}
+
+#picture.content{
+    margin-top: 0 !important;
 }
