@@ -54,8 +54,8 @@ const SeatLogic = () => {
   }, [seat]);
 
   useEffect(() => {
-    const snapScript = "https://app.sandbox.midtrans.com/snap/snap.js"
-    const clientKey = process.env.REACT_APP_SANDBOX_MIDTRANS_CLIENT_KEY
+    const snapScript = "https://app.midtrans.com/snap/snap.js"
+    const clientKey = process.env.REACT_APP_MIDTRANS_CLIENT_KEY
     const script = document.createElement('script')
     script.src = snapScript
     script.setAttribute('data-client-key', clientKey)
