@@ -20,8 +20,8 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="about" element={<About/>} />
           <Route path="donate" element={<Donate/>} />
-          <Route path="success/*" element={<Success/>}/>
-          <Route path="failure/*" element={<Failure/>}/>
+          <Route path="success*" element={<Success/>}/>
+          <Route path="failure*" element={<Failure/>}/>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -81,7 +81,7 @@ body{
   width: 100%;
   position: relative;
   padding: 3vh;
-  border-radius: 8px;
+  border-radius: 16px;
   margin: 2vh auto;
   z-index: 0;
 }
@@ -338,7 +338,7 @@ button{
 } */
 
 .table__panggung{
-    margin: 0 auto 0 600px;
+    margin: 0 590px 0 590px;
     background-color: crimson;
     width: 1000px;
     height: 100px;

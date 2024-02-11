@@ -38,9 +38,9 @@ const SeatLogic = () => {
             const seatData = response.data;
   
             if (seatData.isVIP) {
-              totalCost += 750000;
+              totalCost += 75000;
             } else {
-              totalCost += 500000;
+              totalCost += 50000;
             }
           } catch (error) {
             console.error(`Error fetching seat ${seatID} data:`, error);

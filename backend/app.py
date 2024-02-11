@@ -50,8 +50,8 @@ seatSchema = SeatSchema(many=True)
 
 snap = midtransclient.Snap(
     is_production=False,
-    server_key=os.getenv('SANDBOX_MIDTRANS_SERVER_KEY'),
-    client_key=os.getenv('SANDBOX_MIDTRANS_CLIENT_KEY')
+    server_key=os.getenv('MIDTRANS_SERVER_KEY'),
+    client_key=os.getenv('MIDTRANS_CLIENT_KEY')
 )
 
 # parameter_price = 100
