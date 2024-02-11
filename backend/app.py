@@ -21,7 +21,6 @@ dotenv.load_dotenv()
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
-# CORS(app, origins='http://localhost:3000')
 login_manager = LoginManager()
 login_manager.init_app(app)
 
