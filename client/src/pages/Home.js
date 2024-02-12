@@ -45,7 +45,7 @@ const Home = () => {
                             <li>Apabila sudah selesai memilih, tekan tombol "Order Seat".</li>
                             <li>Waktu pembayaran yang tersedia adalah 30 menit.</li>
                             <li>Setelah melakukan transaksi, periksalah konfirmasi pembayaran dikirim ke email.</li>
-                            <li>Bagi yang ingin melakukan berdonasi silahkan menuju ke link <i>Donate</i></li>
+                            <li>Bagi yang ingin berdonasi silahkan menuju ke link <i>Donate</i></li>
                             <br></br>
                             <h3><strong style={{color:RED}}>Mohon mengecek email yang Anda gunakan dalam pembayaran secara berkala untuk status orderan Anda.</strong></h3>
                         </ol>
@@ -76,10 +76,6 @@ const Home = () => {
                         <span>
                             <i className="ri-square-fill" id='purple'></i>
                             <p>Pending</p>
-                        </span>
-                        <span>
-                            <i className="ri-square-fill" id='black'></i>
-                            <p>Reserved</p>
                         </span>
                     </div>
                     <div className="seperator"></div>

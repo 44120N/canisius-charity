@@ -6,7 +6,7 @@ const Donate = () => {
                 <div className="content">
                     <div className="donate">
                         <h1>Donate</h1>
-                        <p>Bagi yang ingin berkontribusi dalam acara ini, silahkan berdonasi</p>
+                        <p>Bagi yang ingin berdonasi, silahkan mengisi nominal di bawah ini</p>
                         <DonateLogic />
                     </div>
                 </div>
