@@ -46,8 +46,13 @@ const Home = () => {
                             <li>Waktu pembayaran yang tersedia adalah 30 menit.</li>
                             <li>Setelah melakukan transaksi, periksalah konfirmasi pembayaran dikirim ke email.</li>
                             <li>Bagi yang ingin berdonasi silahkan menuju ke link <i>Donate</i></li>
+                            <li>Bila terdapat masalah, silahkan hubungi nomor WA di paling bawah</li>
+                            <br></br>
+                            <h3><strong style={{color:RED}}>Mohon bersabar ketika memencet tombol tempat duduk. <br></br>Sistem memerlukan beberapa detik untuk merespon order Anda, tidak disarankan untuk menekan tombol berkali-kali.</strong></h3>
                             <br></br>
                             <h3><strong style={{color:RED}}>Mohon mengecek email yang Anda gunakan dalam pembayaran secara berkala untuk status orderan Anda.</strong></h3>
+                            <br></br>
+                            <h3><strong style={{color:RED}}>Bila semua tempat duduk bewarna hitam, maka server sedang diperbaiki</strong></h3>
                         </ol>
                     </Popup>
 

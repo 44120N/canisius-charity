@@ -19,11 +19,16 @@
     padding: 5vh 10vw;
     width: 100%;
     max-width: 75vw;
+    max-height: 70vh;
+    overflow-y: auto;
+    overflow-x: auto;
     background-color: var(--CC-blue);
-    text-align: justify;
+    text-align: left;
 }
 
-
+.popup-inner h2{
+    text-align: center;
+}
 
 .popup-inner .popup__btn--close{
     border: none;
