@@ -47,45 +47,13 @@ function SeatLayout() {
       }
     };
 
-    const intervalId = setInterval(fetchData, 1000); // Fetch data every 1 second
-
-    // Cleanup function to clear the interval when the component unmounts
+    const intervalId = setInterval(fetchData, 300);
     return () => clearInterval(intervalId);
   }, []);
 
-  // const handleSeatChange = (changedSeat) => {
-  //   // Update the UI with the changed seat
-  //   setSeats((prevSeats) =>
-  //     prevSeats.map((seat) =>
-  //       seat.id === changedSeat.id ? { ...seat, ...changedSeat } : seat
-  //     )
-  //   );
-  // };
-
-  // useEffect(() => {
-  //   // Fetch initial seat data
-  //   fetchSeatData();
-
-  //   // Listen for seat change events from the server
-  //   socket.on('seat_change', handleSeatChange);
-
-  //   return () => {
-  //     socket.off('seat_change', handleSeatChange);
-  //   };
-  // }, []);
-
-  // const fetchSeatData = async () => {
-  //   try {
-  //     const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/seats`);
-  //     setSeats(response.data);
-  //   } catch (error) {
-  //     console.error('Error fetching seat data:', error);
-  //   }
-  // };
-
   const renderSeatButtons = () => {
-    return (<>
-    {/* <img className="imageLayout" src={seatLayout}/> */}
+    return (
+    <>
     <div className="table">
         <table id="table__mother">
             <div className="table__left">
@@ -1099,7 +1067,6 @@ function SeatLayout() {
       }
     };
 
-    //aaron, should i add this???
     const getSeatCursor = () => {
       if(isLoggedIn){
         return 'pointer';

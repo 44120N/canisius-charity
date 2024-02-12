@@ -6,6 +6,7 @@
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(3px);
+    margin-top: calc(var(--header-height) - 10vh);
 
     display: flex;
     justify-content: center;
@@ -15,21 +16,24 @@
 
 .popup-inner{
     position: relative;
-    padding: 10vh 10vw;
+    padding: 5vh 10vw;
     width: 100%;
     max-width: 75vw;
     background-color: var(--CC-blue);
     text-align: justify;
 }
 
+
+
 .popup-inner .popup__btn--close{
     border: none;
-    background-color: crimson;
+    background-color: var(--green-color-full);
     width: 32px;
-    
-    position: absolute;
-    top: 16px;
-    right: 16px;
+    margin-top: 3vh;
+    position: relative;
+
+    color: black;
+    font-weight: 500;
 }
 
 .popup-inner li{

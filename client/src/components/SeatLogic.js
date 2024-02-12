@@ -51,9 +51,9 @@ const SeatLogic = () => {
             const seatData = response.data;
   
             if (seatData.isVIP) {
-              totalCost += 75000;
+              totalCost += 750000;
             } else {
-              totalCost += 50000;
+              totalCost += 500000;
             }
           } catch (error) {
             console.error(`Error fetching seat ${seatID} data:`, error);
@@ -97,7 +97,7 @@ const SeatLogic = () => {
           console.log(requestData.redirect_url);
           console.log(seat);
           if (requestData.token) {
-            alert("You have 15 minutes to do the payment!")
+            alert("You have 30 minutes to do the payment!")
             window.snap.pay(requestData.token, {
               onSuccess: function (result) {
                 updateSeat([]);

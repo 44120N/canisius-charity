@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import { useState, useEffect } from "react";
 import { useSeat } from '../SeatContext';
 import SeatLayout from '../components/SeatRender';
@@ -5,15 +6,23 @@ import SeatLogic from '../components/SeatLogic';
 import Popup from '../components/Popup';
 
 const Home = () => {
-    const date = "23-02-2024";
-    const time = "09:00";
+    const [currentDate, setCurrentDate] = useState(new Date());
     const { seat, cost } = useSeat();
     const [timedPopup, setTimedPopup] = useState(false);
-    const GREEN = 'var(--green-color)';
+    const GREEN = 'var(--green-color-full)';
+    const RED = 'var(--red-color)';
     useEffect(()=>{
         setTimeout(()=>{
             setTimedPopup(true);
-        }, 3000);
+        }, 1000);
+    }, []);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+          setCurrentDate(new Date());
+        }, 1000);
+    
+        return () => clearInterval(intervalId);
     }, []);
 
     const rupiah = (number) => {
@@ -34,8 +43,11 @@ const Home = () => {
                             <li>Setelah login, gambar icon profile google serta tombol "Order Seat" berwarna <span style={{color:GREEN}}>hijau</span>. <br></br>Apabila login gagal, silahkan memeriksa ulang jaringan internet.</li>
                             <li>Pilihlah tempat duduk yang dikehendaki. Maksimal 5 kursi dalam satu pemesanan.</li>
                             <li>Apabila sudah selesai memilih, tekan tombol "Order Seat".</li>
-                            <li>Waktu pembayaran yang tersedia adalah 15 menit.</li>
+                            <li>Waktu pembayaran yang tersedia adalah 30 menit.</li>
                             <li>Setelah melakukan transaksi, periksalah konfirmasi pembayaran dikirim ke email.</li>
+                            <li>Bagi yang ingin melakukan berdonasi silahkan menuju ke link <i>Donate</i></li>
+                            <br></br>
+                            <h3><strong style={{color:RED}}>Mohon mengecek email yang Anda gunakan dalam pembayaran secara berkala untuk status orderan Anda.</strong></h3>
                         </ol>
                     </Popup>
 
@@ -74,7 +86,7 @@ const Home = () => {
                     <div className="event__info">
                         <h3>Canisius College Charity Concert</h3>
                         <p>Seats: { seat.sort().join(", ") }</p>
-                        <p>Date: { date }, Time: { time }</p>
+                        <p>Date: { format(currentDate, 'dd/MM/yyyy, HH:mm:ss') }</p>
                         <p>Total Payment: { rupiah(cost) }</p>  
                     </div>
                 </div>

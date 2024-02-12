@@ -177,7 +177,7 @@ class AdminUser(UserMixin):
         return self.username
     
     def is_authenticated(self):
-        return False
+        return True
     
     def is_admin(self):
         return False
@@ -213,7 +213,7 @@ def login():
             flash('Invalid username or password', 'error')
     return render_template('login.html')
 
-@app.route('/admin/logout')
+@app.route('/admin/logout/')
 @login_required
 def admin_logout():
     logout_user()
@@ -236,11 +236,9 @@ class SeatModelView(ModelView):
     column_searchable_list = ['id', 'owner_id']
     column_sortable_list = ['id']
     column_filters = ['isAvailable', 'isVIP', 'isVVIP', 'owner_id', 'isOrder']
-    form_widget_args = {
-        'created_at': {
-            'widget': DateTimePickerWidget()
-        }
-    }
+    # column_exclude_list = ['id']
+    form_columns = ['id', 'isAvailable', 'isVIP', 'isVVIP', 'owner_id', 'isOrder']
+    
     @expose('/edit/<id>', methods=['GET', 'POST'])
     def edit_view(self, id):
         seat = Seat.query.get_or_404(id)

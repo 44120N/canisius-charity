@@ -9,8 +9,10 @@ const Popup = (props) =>{
     <>
         <div className="popup">
             <div className="popup-inner">
-                <button className="popup__btn--close" onClick={() => {props.setTrigger(false)}}>OK</button>
                 {props.children}
+                <div className='center'>
+                    <button className="popup__btn--close" onClick={() => {props.setTrigger(false)}}><strong>OK</strong></button>
+                </div>
             </div>
         </div>
     </>
