@@ -10,7 +10,7 @@ from retrying import retry
 from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.base import AdminIndexView, expose
-from flask_admin.form import DateTimePickerWidget
+from flask_admin.actions import action
 from flask_admin.contrib.sqla import ModelView
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -236,7 +236,6 @@ class SeatModelView(ModelView):
     column_searchable_list = ['id', 'owner_id']
     column_sortable_list = ['id']
     column_filters = ['isAvailable', 'isVIP', 'isVVIP', 'owner_id', 'isOrder']
-    # column_exclude_list = ['id']
     form_columns = ['id', 'isAvailable', 'isVIP', 'isVVIP', 'owner_id', 'isOrder']
     
     @expose('/edit/<id>', methods=['GET', 'POST'])
@@ -256,6 +255,25 @@ class SeatModelView(ModelView):
             return redirect(url_for('admin.index'))
 
         return self.render('seat_edit.html', form=form, seats=seat)
+    
+    @action('resetSeat', 'Reset Seat', 'Are you sure you want to do something with the selected items?')
+    def resetSeat(self, ids):
+        seats = Seat.query.filter(Seat.id.in_(ids)).all()
+        for seat in seats:
+            seat.isOrder = False
+            seat.owner_id = ""
+        db.session.commit()
+        flash('Action completed successfully', 'success')
+        
+    @action('lockSeat', 'Lock Seat', 'Are you sure you want to do something with the selected items?')
+    def lockSeat(self, ids):
+        seats = Seat.query.filter(Seat.id.in_(ids)).all()
+        for seat in seats:
+            seat.isAvailable = False
+            seat.isOrder = False
+            seat.owner_id = ""
+        db.session.commit()
+        flash('Action completed successfully', 'success')
 
 class SeatEditForm(FlaskForm):
     isAvailable = BooleanField('Available')
