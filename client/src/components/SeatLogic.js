@@ -1,12 +1,24 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { useUser } from '../UserContext';
 import { useSeat } from '../SeatContext';
 import axios from 'axios';
 
+import QrisImg from "../assets/QRIS.jpg";
+import "./Popup.css"
+
 const SeatLogic = () => {
   const { user } = useUser();
   const { seat, updateSeat, cost, updateCost } = useSeat();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [buttonPopupQRIS, setButtonPopupQRIS] = useState(false);
+
+  const rupiah = (number) => {
+    return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+    }).format(number);
+  }
   
   async function orderStat(seatIds, isOrder) {
     for (const seatId of seatIds) {
@@ -66,62 +78,10 @@ const SeatLogic = () => {
       calculateTotalCost();
   }, [seat]);
 
-  useEffect(() => {
-    const snapScript = "https://app.midtrans.com/snap/snap.js"
-    const clientKey = process.env.REACT_APP_MIDTRANS_CLIENT_KEY
-    const script = document.createElement('script')
-    script.src = snapScript
-    script.setAttribute('data-client-key', clientKey)
-    script.async = true
-    document.body.appendChild(script)
-    return () => {
-      document.body.removeChild(script)
-    }
-  }, [])
-
-  const handleClick = async () => {
+  const handleClick = () => {
     if (isLoggedIn) {
       if (cost !== 0) {
-        const transaction_data = {
-          id: seat.sort().join(", "), 
-          price: cost, 
-          first_name: user.given_name, 
-          last_name: user.family_name, 
-          email: user.email
-        }
-
-        try {
-          const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/tokenizer/${user.email}`, transaction_data);
-          const requestData = await response.data;
-          console.log(requestData.token);
-          console.log(requestData.redirect_url);
-          console.log(seat);
-          if (requestData.token) {
-            alert("You have 30 minutes to do the payment!")
-            window.snap.pay(requestData.token, {
-              onSuccess: function (result) {
-                updateSeat([]);
-              },
-              onPending: function (result) {
-                alert("waiting for your payment!");
-                console.log(result);
-              },
-              onError: function (result) {
-                alert("payment failed!");
-                updateSeat([]);
-                reset(seat);
-                console.log(result);
-              },
-              onClose: function () {
-                alert('you closed the popup without finishing the payment');
-                updateSeat([]);
-                reset(seat);
-              }
-            });
-          }          
-        } catch (error) {
-          console.error('Error fetching snapToken:', error);
-        }
+        setButtonPopupQRIS(true);
       } else {
         window.alert('You purchased nothing');
       }
@@ -141,8 +101,65 @@ const SeatLogic = () => {
       backgroundColor: isLoggedIn ? '#4CAF50' : '#f44336'
   });
 
+  const closeTransaction = (props) => {
+    setButtonPopupQRIS(false);
+    alert('You closed the popup without finishing the payment');
+    updateSeat([]);
+    reset(seat);
+  }
+
+  const pendingTransaction = () => {
+    alert("Waiting for your payment!");
+  }
+
+  const errorTransaction = () => {
+    alert("Payment failed!");
+    updateSeat([]);
+    reset(seat);
+  }
+
+  const textToCopy = "3429982023";
+  const handleCopy = () => {
+    navigator.clipboard.writeText(textToCopy)
+      .then(() => {
+        console.log('Text copied to clipboard');
+      })
+      .catch((error) => {
+        console.error('Error copying text to clipboard: ', error);
+      });
+    alert("Text copied")
+  };
+
   return (
-      <button id='order-button' style={getButtonStyle()} onClick={handleClick}>Order Seat</button>
+    <>
+      {buttonPopupQRIS && (
+        <div className="popup--QRIS">
+          <div className="popup-inner--QRIS">
+            <div className="popup-info--QRIS">
+              <h2>Ticket Payment</h2>
+                <p>Item &emsp;: {seat.sort().join(", ")}</p>
+                <p>Cost &emsp;: {rupiah(cost)}</p>
+                <p>Name &emsp;: {user.given_name} {user.family_name}</p>
+                <p>Email &emsp;: {user.email}</p>
+            </div>
+            <br/>
+            <img src={QrisImg} alt="qris"/>
+            <h3>Rekening BCA (Click number to Copy)</h3>
+            <p>YAY BUDI SISWA: <strong><a style={{color: "#9999FF"}} onClick={handleCopy}>{3429982023}</a></strong></p>
+            <div className='center'>
+              <button className="popup__btn--close--QRIS" onClick={closeTransaction}><strong>Cancel</strong></button>
+            </div>
+          </div>
+        </div>
+      )}
+      <button 
+        id='order-button' 
+        style={getButtonStyle()} 
+        onClick={handleClick} 
+        onPending={pendingTransaction} 
+        onError={errorTransaction}
+      >Order Seat</button>
+    </>
   );
 };
 

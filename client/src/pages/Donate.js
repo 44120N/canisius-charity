@@ -1,4 +1,5 @@
 import DonateLogic from "../components/DonateLogic";
+
 const Donate = () => {
     return(
         <>

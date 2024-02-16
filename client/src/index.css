@@ -95,7 +95,7 @@ body{
 .about p{
     line-height: 1.5em;
     text-align: justify;
-    color: var(--third-color);
+    /* color: var(--third-color); */
     font-family: var(--body-font);
     font-weight: var(--font-regular);
 }

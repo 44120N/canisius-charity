@@ -1,12 +1,22 @@
 import { useState, useEffect } from 'react';
 import { useUser } from '../UserContext';
-import axios from 'axios';
+
+import QrisImg from "../assets/QRIS.jpg";
+import "./Popup.css"
 
 const DonateLogic = () => {
   const { user } = useUser();
-  const [donate, setDonate] = useState(0)
+  const [donate, setDonate] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
+  const [buttonPopupQRIS, setButtonPopupQRIS] = useState(false);
+
+  const rupiah = (number) => {
+    return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+    }).format(number);
+  }
+
   useEffect(() => {
     console.log(user.email);
   }, [user]);
@@ -22,41 +32,7 @@ const DonateLogic = () => {
   const handleClick = async () => {
     if (isLoggedIn) {
       if (donate !== 0) {
-        const transaction_data = {
-          id: 'donate', 
-          price: donate,
-          first_name: user.given_name, 
-          last_name: user.family_name, 
-          email: user.email
-        }
-
-        try {
-          const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/tokenizer/${user.email}`, transaction_data);
-          const requestData = await response.data;
-          console.log(requestData.token);
-          console.log(requestData.redirect_url);
-          console.log(donate);
-          if (requestData.token) {
-            window.snap.pay(requestData.token, {
-              onSuccess: function (result) {
-                setDonate(0);
-              },
-              onPending: function (result) {
-                alert("waiting for your payment!");
-                console.log(result);
-              },
-              onError: function (result) {
-                alert("payment failed!");
-                console.log(result);
-              },
-              onClose: function () {
-                alert('you closed the popup without finishing the payment');
-              }
-            });
-          }          
-        } catch (error) {
-          console.error('Error fetching snapToken:', error);
-        }
+        setButtonPopupQRIS(true);
       } else {
         window.alert('You donate nothing');
       }
@@ -76,8 +52,53 @@ const DonateLogic = () => {
       backgroundColor: '#4CAF50'
   });
 
+  const closeTransaction = (props) => {
+    setButtonPopupQRIS(false);
+    alert('You closed the popup without finishing the payment');
+  }
+
+  const pendingTransaction = () => {
+    alert("Waiting for your payment!");
+  }
+
+  const errorTransaction = () => {
+    alert("Payment failed!");
+  }
+
+  const textToCopy = "3429982023";
+  const handleCopy = () => {
+    navigator.clipboard.writeText(textToCopy)
+      .then(() => {
+        console.log('Text copied to clipboard');
+      })
+      .catch((error) => {
+        console.error('Error copying text to clipboard: ', error);
+      });
+    alert("Text copied")
+  };
+
   return (
     <>
+      {buttonPopupQRIS && (
+        <div className="popup--QRIS">
+          <div className="popup-inner--QRIS">
+            <div className="popup-info--QRIS">
+              <h2>Donate</h2>
+                <p>Item &emsp;: {"Donate"}</p>
+                <p>Cost &emsp;: {rupiah(donate)}</p>
+                <p>Name &emsp;: {user.given_name} {user.family_name}</p>
+                <p>Email&emsp;: {user.email}</p>
+            </div>
+            <br/>
+            <img src={QrisImg} alt="qris"/>
+            <h3>Rekening BCA (Click number to Copy)</h3>
+            <p>YAY BUDI SISWA: <strong><a style={{color: "#9999FF"}} onClick={handleCopy}>{3429982023}</a></strong></p>
+            <div className='center'>
+              <button className="popup__btn--close--QRIS" onClick={closeTransaction}><strong>Cancel</strong></button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className='input-group'>
         <span className="input-group-addon">
             Rp
@@ -95,10 +116,10 @@ const DonateLogic = () => {
           id='donate-button'
           style={getButtonStyle()}
           onClick={handleClick}
+          onPending={pendingTransaction} 
+          onError={errorTransaction}
           disabled={!isLoggedIn}
-        >
-          Donate
-        </button>
+        >Donate</button>
       </div>
     </>
   );
