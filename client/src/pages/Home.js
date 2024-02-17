@@ -11,6 +11,7 @@ const Home = () => {
     const [timedPopup, setTimedPopup] = useState(false);
     const GREEN = 'var(--green-color-full)';
     const RED = 'var(--red-color)';
+    
     useEffect(()=>{
         setTimeout(()=>{
             setTimedPopup(true);

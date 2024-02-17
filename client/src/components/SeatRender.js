@@ -2,10 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSeat } from '../SeatContext';
 import { useUser } from '../UserContext';
-// import io from 'socket.io-client';
-// import seatLayout from "../assets/null.png"
-
-// const socket = io.connect(`${process.env.REACT_APP_API_URL}`); 
 
 const BLUE = "var(--blue-color)";
 const RED = "var(--red-color)";
@@ -54,7 +50,7 @@ function SeatLayout() {
   const renderSeatButtons = () => {
     return (
     <>
-    <div className="table">
+      <div className="table">
         <table id="table__mother">
             <div className="table__left">
               <tr className="table__side">
@@ -1070,7 +1066,7 @@ function SeatLayout() {
     const getSeatCursor = () => {
       if(isLoggedIn){
         return 'pointer';
-      }else{
+      } else {
         return 'not-allowed';
       }
     }

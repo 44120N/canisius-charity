@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useUser } from '../UserContext';
 
-import QrisImg from "../assets/QRIS.jpg";
+// import QrisImg from "../assets/QRIS.jpg";
 import "./Popup.css"
 
 const DonateLogic = () => {
@@ -90,7 +90,7 @@ const DonateLogic = () => {
                 <p>Email&emsp;: {user.email}</p>
             </div>
             <br/>
-            <img src={QrisImg} alt="qris"/>
+            {/* <img src={QrisImg} alt="qris"/> */}
             <h3>Rekening BCA (Click number to Copy)</h3>
             <p>YAY BUDI SISWA: <strong><a style={{color: "#9999FF"}} onClick={handleCopy}>{3429982023}</a></strong></p>
             <div className='center'>

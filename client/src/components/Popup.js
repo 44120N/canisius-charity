@@ -3,8 +3,6 @@ import "./Popup.css";
 
 
 const Popup = (props) =>{
-    
-
     return (props.trigger) ? (
     <>
         <div className="popup">

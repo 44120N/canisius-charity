@@ -4,11 +4,12 @@ import { useUser } from '../UserContext';
 import { useSeat } from '../SeatContext';
 import axios from 'axios';
 
-import QrisImg from "../assets/QRIS.jpg";
+// import QrisImg from "../assets/QRIS.jpg";
 import "./Popup.css"
 
 const SeatLogic = () => {
   const { user } = useUser();
+  const [transaction_id, set_transaction_id] = useState(0);
   const { seat, updateSeat, cost, updateCost } = useSeat();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [buttonPopupQRIS, setButtonPopupQRIS] = useState(false);
@@ -19,6 +20,10 @@ const SeatLogic = () => {
         currency: "IDR",
     }).format(number);
   }
+
+  useEffect(()=>{
+    set_transaction_id(Math.floor(Math.random() * 999-10+1) + 10)
+  }, []);
   
   async function orderStat(seatIds, isOrder) {
     for (const seatId of seatIds) {
@@ -34,6 +39,10 @@ const SeatLogic = () => {
         owner_id: ownerId
       });
     }
+  }
+
+  async function save_transaction(json) {
+    await axios.put(`${process.env.REACT_APP_API_URL}/api/user/put`, json);
   }
 
   async function reset(seatIds) {
@@ -72,7 +81,7 @@ const SeatLogic = () => {
           }
         }
     
-        updateCost(totalCost);
+        updateCost(totalCost+transaction_id*0.001);
       };
     
       calculateTotalCost();
@@ -80,8 +89,18 @@ const SeatLogic = () => {
 
   const handleClick = () => {
     if (isLoggedIn) {
-      if (cost !== 0) {
+      if (Math.floor(cost) !== 0) {
         setButtonPopupQRIS(true);
+        const transaction_data = {
+          id: transaction_id,
+          username: `${user.given_name} ${user.family_name}`,
+          email: user.email,
+          owned_seat: seat,
+          amount: `${cost.toFixed(2)}`
+        };
+        console.log(transaction_data);
+        save_transaction(transaction_data);
+        set_transaction_id(Math.floor(Math.random() * 999) + 1)
       } else {
         window.alert('You purchased nothing');
       }
@@ -143,7 +162,7 @@ const SeatLogic = () => {
                 <p>Email &emsp;: {user.email}</p>
             </div>
             <br/>
-            <img src={QrisImg} alt="qris"/>
+            {/* <img src={QrisImg} alt="qris"/> */}
             <h3>Rekening BCA (Click number to Copy)</h3>
             <p>YAY BUDI SISWA: <strong><a style={{color: "#9999FF"}} onClick={handleCopy}>{3429982023}</a></strong></p>
             <div className='center'>

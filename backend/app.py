@@ -2,7 +2,7 @@ import os, requests, dotenv, random, datetime
 from flask import Flask, flash, jsonify, render_template, session, redirect, url_for, request
 from flask_cors import CORS
 from flask_marshmallow import Marshmallow
-from models import db, Seat
+from models import db, Seat, User
 import midtransclient
 from sqlalchemy.exc import OperationalError
 from retrying import retry
@@ -42,10 +42,10 @@ class SeatSchema(ma.Schema):
         fields = ('id', 'isAvailable', 'isVIP', 'isVVIP', 'owner_id', 'isOrder')
 seatSchema = SeatSchema(many=True)
 
-# class UserSchema(ma.Schema):
-#     class Meta:
-#         fields = ('id', 'owned_seat')
-# userSchema = UserSchema(many=True)
+class UserSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'username', 'email', 'owned_seat', 'amount')
+userSchema = UserSchema(many=True)
 
 snap = midtransclient.Snap(
     is_production=True,
@@ -54,13 +54,13 @@ snap = midtransclient.Snap(
 
 @app.before_request
 def set_is_order_false():
-    seats = Seat.query.filter_by(owner_id="").all()
+    seats = Seat.query.filter(Seat.owner_id=="").all()
     for seat in seats:
         seat.isOrder = False
     db.session.commit()
     
 @app.before_request
-def set_is_locked():
+def set_is_pending():
     seats = Seat.query.filter(Seat.owner_id != "").all()
     for seat in seats:
         seat.isOrder = True
@@ -109,6 +109,38 @@ def post_seat_isOrder(seat_id):
 def get_all_seats():
     seats = Seat.query.all()
     result = seatSchema.dump(seats)
+    return jsonify(result)
+
+@app.route('/api/user/<transaction_id>', methods=['GET'])
+def get_user_id(transaction_id):
+    user = User.query.get(transaction_id)
+    if user:
+        return jsonify({'id': user.id, 'username': user.username, 'email': user.email, 'owned_seat': user.owned_seat, 'amount': user.amount})
+    else:
+        return jsonify({'error': 'Transaction not found'}), 404
+
+@app.route('/api/user/put', methods=['PUT'])
+@retry(wait_fixed=1000, stop_max_attempt_number=3)
+def put_user():
+    data = request.get_json()
+    try:
+        user = User(
+            id = data['id'],
+            username = data['username'],
+            email = data['email'],
+            owned_seat = data['owned_seat'],
+            amount = data['amount']
+        )
+        db.session.add(user)
+        db.session.commit()
+        return jsonify({'message': f'Transaction #{data["id"]} updated successfully'}), 200
+    except OperationalError:
+        raise
+
+@app.route('/api/users', methods=['GET'])
+def get_all_users():
+    users = User.query.all()
+    result = userSchema.dump(users)
     return jsonify(result)
     
 @app.route('/api/transaction/<user_email>', methods=['POST'])
@@ -281,9 +313,22 @@ class SeatEditForm(FlaskForm):
     isVVIP = BooleanField('VVIP')
     owner_id = StringField('Owner ID')
     isOrder = BooleanField('Order')
+    
+class UserModelView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.is_admin
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('login'))
+    
+    column_list = ['id', 'username', 'email', 'owned_seat', 'amount']
+    column_searchable_list = ['id', 'email']
+    column_sortable_list = ['id']
+    column_filters = ['id', 'username', 'email', 'owned_seat', 'amount']
+    form_columns = ['id', 'username', 'email', 'owned_seat', 'amount']
 
 admin = Admin(app, name='Admin Console', template_mode='bootstrap3', index_view=AdminHomeView())
 admin.add_view(SeatModelView(Seat, db.session))
+admin.add_view(UserModelView(User, db.session))
 
 if __name__ == "__main__":
     app.run(debug=True)
