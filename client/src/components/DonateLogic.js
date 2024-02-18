@@ -99,7 +99,7 @@ const DonateLogic = () => {
           </div>
         </div>
       )}
-      <div className='input-group'>
+      {/* <div className='input-group'>
         <span className="input-group-addon">
             Rp
         </span>
@@ -110,7 +110,7 @@ const DonateLogic = () => {
           onChange={handleChange}
           style={{ marginRight: '10px' }}
         />
-      </div>
+      </div> */}
       <div>
         <button
           id='donate-button'

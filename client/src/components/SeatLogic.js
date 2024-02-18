@@ -23,13 +23,16 @@ const SeatLogic = () => {
 
   useEffect(()=>{
     set_transaction_id(Math.floor(Math.random() * 99) + 1);
+  }, []);
+
+  useEffect(()=>{
     try {
       axios.get(`${process.env.REACT_APP_API_URL}/api/user/${user.email}`)
-      .then(response => updateSeat(response.data.id));
+      .then(response => {updateSeat(response.data.id)});
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  }, []);
+  }, [user.email]);
   
   async function orderStat(seatIds, isOrder) {
     for (const seatId of seatIds) {
@@ -126,11 +129,9 @@ const SeatLogic = () => {
       backgroundColor: isLoggedIn ? '#4CAF50' : '#f44336'
   });
 
-  const closeTransaction = (props) => {
+  const closeTransaction = () => {
     setButtonPopupQRIS(false);
     alert('You closed the popup without finishing the payment');
-    updateSeat([]);
-    reset(seat);
   }
 
   const pendingTransaction = () => {
@@ -143,7 +144,7 @@ const SeatLogic = () => {
     reset(seat);
   }
 
-  const textToCopy = "3429982023";
+  const textToCopy = "3427702777";
   const handleCopy = () => {
     navigator.clipboard.writeText(textToCopy)
       .then(() => {
@@ -163,16 +164,21 @@ const SeatLogic = () => {
             <div className="popup-info--QRIS">
               <h2>Ticket Payment</h2>
               <br></br>
-              <h3 style={{color: '#ff0000'}}>Please screenshot the payment info as a reminder</h3>
+              <h3 style={{color: 'var(--red-color)'}}>Please screenshot the payment info as a reminder</h3>
                 <p>Item &emsp;: {seat.sort().join(", ")}</p>
                 <p>Cost &emsp;: {rupiah(cost)}</p>
+                <p>({transaction_id} is the transaction id, so make sure to transfer the same amount as the payment info)</p>
                 <p>Name &emsp;: {user.given_name} {user.family_name}</p>
                 <p>Email &emsp;: {user.email}</p>
             </div>
             <br/>
             {/* <img src={QrisImg} alt="qris"/> */}
             <h3>Rekening BCA (Click number to Copy)</h3>
-            <p>YAY BUDI SISWA: <strong><a style={{color: "#9999FF"}} onClick={handleCopy}>{3429982023}</a></strong></p>
+            <p>YAY BUDI SISWA: <strong><a style={{color: "#9999FF"}} onClick={handleCopy}>{3427702777}</a></strong></p>
+            <br></br>
+            <h4>We will check the payment in 24 hours, starts from now!</h4>
+            <h4>If the payment is successful, the seat will be <b style={{color: 'var(--red-color)'}}>sold</b> and turned to <b style={{color: 'var(--red-color)'}}>red color</b>!</h4>
+            <h4>Otherwise, it will be <b style={{color: 'var(--green-color)'}}>available</b> again and turned to previous color!</h4>
             <br></br>
             <div className='center'>
               <button className="popup__btn--close--QRIS" onClick={closeTransaction}><strong>Cancel</strong></button>
