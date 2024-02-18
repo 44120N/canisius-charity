@@ -65,6 +65,15 @@ def set_is_pending():
     for seat in seats:
         seat.isOrder = True
     db.session.commit()
+    
+@app.route('/api/user/<user_email>', methods=['GET'])
+def update_user_seat(user_email):
+    seat = Seat.query.filter(Seat.owner_id == user_email).all()
+    try:
+        seats = [s.id for s in seat]
+        return jsonify({'id': seats}), 200
+    except Exception as e:
+        return jsonify({'error': f'Failed to get user {user_email}\'s seat'}), 404
 
 @app.route('/api/seat/<seat_id>', methods=['GET'])
 def get_seat_status(seat_id):
@@ -267,7 +276,7 @@ class SeatModelView(ModelView):
     column_list = ['id', 'isAvailable', 'isVIP', 'isVVIP', 'owner_id', 'isOrder']
     column_searchable_list = ['id', 'owner_id']
     column_sortable_list = ['id']
-    column_filters = ['isAvailable', 'isVIP', 'isVVIP', 'owner_id', 'isOrder']
+    column_filters = ['isAvailable', 'isVIP', 'isVVIP', 'isOrder']
     form_columns = ['id', 'isAvailable', 'isVIP', 'isVVIP', 'owner_id', 'isOrder']
     
     @expose('/edit/<id>', methods=['GET', 'POST'])
@@ -323,7 +332,7 @@ class UserModelView(ModelView):
     column_list = ['id', 'username', 'email', 'owned_seat', 'amount']
     column_searchable_list = ['id', 'email']
     column_sortable_list = ['id']
-    column_filters = ['id', 'username', 'email', 'owned_seat', 'amount']
+    column_filters = ['username', 'owned_seat', 'amount']
     form_columns = ['id', 'username', 'email', 'owned_seat', 'amount']
 
 admin = Admin(app, name='Admin Console', template_mode='bootstrap3', index_view=AdminHomeView())

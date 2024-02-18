@@ -91,7 +91,7 @@
     border: none;
     color: white;
     
-    background: rgba(0, 0, 0, 0.41);
+    background: var(--red-color);
     border-radius: 16px;
     backdrop-filter: blur(7.7px);
     -webkit-backdrop-filter: blur(7.7px);

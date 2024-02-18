@@ -11,7 +11,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), nullable=False)
     owned_seat = db.Column(db.String(30), nullable=False)
-    amount = db.Column(db.String(20), nullable=False)
+    amount = db.Column(db.Integer, nullable=False)
 
     def __init__(self, id, username, email, owned_seat, amount):
         self.id = id

@@ -22,7 +22,13 @@ const SeatLogic = () => {
   }
 
   useEffect(()=>{
-    set_transaction_id(Math.floor(Math.random() * 999-10+1) + 10)
+    set_transaction_id(Math.floor(Math.random() * 99) + 1);
+    try {
+      axios.get(`${process.env.REACT_APP_API_URL}/api/user/${user.email}`)
+      .then(response => updateSeat(response.data.id));
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   }, []);
   
   async function orderStat(seatIds, isOrder) {
@@ -81,7 +87,7 @@ const SeatLogic = () => {
           }
         }
     
-        updateCost(totalCost+transaction_id*0.001);
+        updateCost(totalCost+transaction_id);
       };
     
       calculateTotalCost();
@@ -89,18 +95,18 @@ const SeatLogic = () => {
 
   const handleClick = () => {
     if (isLoggedIn) {
-      if (Math.floor(cost) !== 0) {
+      if (cost >= 1000) {
         setButtonPopupQRIS(true);
         const transaction_data = {
           id: transaction_id,
           username: `${user.given_name} ${user.family_name}`,
           email: user.email,
-          owned_seat: seat,
-          amount: `${cost.toFixed(2)}`
+          owned_seat: seat.sort().join(", "),
+          amount: parseInt(cost)
         };
         console.log(transaction_data);
         save_transaction(transaction_data);
-        set_transaction_id(Math.floor(Math.random() * 999) + 1)
+        set_transaction_id(Math.floor(Math.random() * 99) + 1)
       } else {
         window.alert('You purchased nothing');
       }
@@ -156,6 +162,8 @@ const SeatLogic = () => {
           <div className="popup-inner--QRIS">
             <div className="popup-info--QRIS">
               <h2>Ticket Payment</h2>
+              <br></br>
+              <h3 style={{color: '#ff0000'}}>Please screenshot the payment info as a reminder</h3>
                 <p>Item &emsp;: {seat.sort().join(", ")}</p>
                 <p>Cost &emsp;: {rupiah(cost)}</p>
                 <p>Name &emsp;: {user.given_name} {user.family_name}</p>
@@ -165,6 +173,7 @@ const SeatLogic = () => {
             {/* <img src={QrisImg} alt="qris"/> */}
             <h3>Rekening BCA (Click number to Copy)</h3>
             <p>YAY BUDI SISWA: <strong><a style={{color: "#9999FF"}} onClick={handleCopy}>{3429982023}</a></strong></p>
+            <br></br>
             <div className='center'>
               <button className="popup__btn--close--QRIS" onClick={closeTransaction}><strong>Cancel</strong></button>
             </div>
