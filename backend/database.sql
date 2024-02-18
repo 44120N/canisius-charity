@@ -648,13 +648,13 @@ INSERT INTO seats(id, isAvailable, isVIP, isVVIP, owner_id, isOrder) VALUES
 -- DROP TABLE seats;
 
 -- TRUNCATE TABLE users;
--- CREATE TABLE users (
---     id SMALLINT PRIMARY KEY,
---     username VARCHAR(50) NOT NULL,
---     email VARCHAR(50) NOT NULL,
---     owned_seat VARCHAR(30) NOT NULL,
---     amount INTEGER NOT NULL
--- );
+CREATE TABLE users (
+    id SMALLINT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    owned_seat VARCHAR(30) NOT NULL,
+    amount INTEGER NOT NULL
+);
 
 -- ALTER TABLE users
 -- ADD email VARCHAR(50) NOT NULL;
