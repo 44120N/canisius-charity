@@ -181,7 +181,7 @@ const SeatLogic = () => {
             <h4>Otherwise, it will be <b style={{color: 'var(--green-color)'}}>available</b> again and turned to previous color!</h4>
             <br></br>
             <div className='center'>
-              <button className="popup__btn--close--QRIS" onClick={closeTransaction}><strong>Cancel</strong></button>
+              <button className="popup__btn--close--QRIS" onClick={closeTransaction}><strong>OK</strong></button>
             </div>
           </div>
         </div>

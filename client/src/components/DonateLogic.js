@@ -31,11 +31,7 @@ const DonateLogic = () => {
 
   const handleClick = async () => {
     if (isLoggedIn) {
-      if (donate !== 0) {
-        setButtonPopupQRIS(true);
-      } else {
-        window.alert('You donate nothing');
-      }
+      setButtonPopupQRIS(true);
     } else {
       window.alert('Sign in first');
     }
@@ -85,7 +81,6 @@ const DonateLogic = () => {
             <div className="popup-info--QRIS">
               <h2>Donate</h2>
                 <p>Item &emsp;: {"Donate"}</p>
-                <p>Cost &emsp;: {rupiah(donate)}</p>
                 <p>Name &emsp;: {user.given_name} {user.family_name}</p>
                 <p>Email&emsp;: {user.email}</p>
             </div>
@@ -94,7 +89,7 @@ const DonateLogic = () => {
             <h3>Rekening BCA (Click number to Copy)</h3>
             <p>YAY BUDI SISWA: <strong><a style={{color: "#9999FF"}} onClick={handleCopy}>{3429982023}</a></strong></p>
             <div className='center'>
-              <button className="popup__btn--close--QRIS" onClick={closeTransaction}><strong>Cancel</strong></button>
+              <button className="popup__btn--close--QRIS" onClick={closeTransaction}><strong>OK</strong></button>
             </div>
           </div>
         </div>
